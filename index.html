@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="https://i.ibb.co/b5jdJzLy/Copy-of-Untitled-3-removebg-preview.png">
 <meta charset="UTF-8">
 <title>ExpressBuild Labs — Store</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -12,182 +11,72 @@
 --bg:linear-gradient(180deg,#f4f8ff,#e7edf8);
 }
 *{box-sizing:border-box;font-family:Inter,Segoe UI,sans-serif;transition:.25s ease}
-body{
-margin:0;
-background:var(--bg);
-color:#0b2a66;
-}
-header{
-position:fixed;top:0;left:0;right:0;
-height:80px;
-background:linear-gradient(135deg,var(--accent),var(--accent2));
-backdrop-filter:blur(12px);
-box-shadow:0 10px 40px rgba(0,0,0,.15);
-display:flex;align-items:center;padding:0 30px;z-index:1000;
-}
+body{margin:0;background:var(--bg);color:#0b2a66}
+body.dark{background:#0f172a;color:white}
+body.dark h1,body.dark h2,body.dark h3,body.dark p,body.dark span,body.dark div{color:white}
+
+header{position:fixed;top:0;left:0;right:0;height:80px;background:linear-gradient(135deg,var(--accent),var(--accent2));backdrop-filter:blur(12px);box-shadow:0 10px 40px rgba(0,0,0,.15);display:flex;align-items:center;padding:0 30px;z-index:1000}
 .brand{display:flex;align-items:center;gap:15px}
 .brand img{width:60px;height:60px;object-fit:contain;border-radius:14px}
 .brand h1{font-size:22px;font-weight:800;color:white}
-body.dark .brand h1{color:white}
-.header-actions{margin-left:auto;font-weight:700}
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:14px;color:white;font-weight:700}
 
-.layout{
-display:flex;
-gap:35px;
-max-width:1400px;
-margin:120px auto 60px;
-padding:0 25px;
-}
+.layout{display:flex;gap:35px;max-width:1400px;margin:120px auto 60px;padding:0 25px}
 .shop{flex:1}
 .controls{display:flex;gap:12px;margin-bottom:25px}
-.search{
-flex:1;
-padding:14px;
-border-radius:14px;
-border:1px solid #dce5f8;
-box-shadow:0 6px 20px rgba(0,0,0,.04);
-}
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-gap:25px;
-}
-.card{
-background:#fff;
-border-radius:22px;
-overflow:hidden;
-box-shadow:0 15px 40px rgba(0,0,0,.07);
-transform:translateY(0);
-}
-.card:hover{
-transform:translateY(-8px) scale(1.02);
-box-shadow:0 25px 55px rgba(0,0,0,.12);
-}
+.search{flex:1;padding:14px;border-radius:14px;border:1px solid #dce5f8;box-shadow:0 6px 20px rgba(0,0,0,.04)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:25px}
+.card{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 15px 40px rgba(0,0,0,.07)}
+.card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 25px 55px rgba(0,0,0,.12)}
+
 .thumb{height:210px;background:#eef4ff;display:flex;align-items:center;justify-content:center}
-.thumb img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;padding:12px}
+.thumb img{width:100%;height:100%;object-fit:contain;padding:12px}
 .card-body{padding:18px;display:flex;flex-direction:column;gap:10px}
 .title{font-weight:800;font-size:18px}
 .price{color:var(--accent);font-weight:800}
-.btn{
-background:linear-gradient(135deg,var(--accent),var(--accent2));
-color:white;
-border:none;
-padding:13px;
-border-radius:14px;
-font-weight:700;
-cursor:pointer;
-box-shadow:0 8px 20px rgba(0,0,0,.12);
-}
+
+.btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;padding:13px;border-radius:14px;font-weight:700;cursor:pointer}
 .btn:hover{opacity:.9;transform:translateY(-3px)}
 
-.cart{
-width:380px;
-background:white;
-border-radius:24px;
-box-shadow:0 20px 60px rgba(0,0,0,.15);
-position:sticky;
-top:120px;
-max-height:calc(100vh - 140px);
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
-.cart-header{
-padding:18px;
-font-weight:800;
-border-bottom:1px solid #eee;
-background:#f7faff;
-}
+.cart{width:380px;background:white;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.15);position:sticky;top:120px;max-height:calc(100vh - 140px);display:flex;flex-direction:column;overflow:hidden}
+.cart-header{padding:18px;font-weight:800;border-bottom:1px solid #eee;background:#f7faff}
 .cart-body{flex:1;overflow:auto;padding:18px}
-.cart-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px}
+.cart-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 .cart-item{display:flex;gap:12px;align-items:center}
-.cart-item img{width:60px;height:60px;border-radius:14px}
+.cart-item img{width:60px;height:60px;border-radius:14px;object-fit:cover}
 .qty{width:65px;padding:7px;border-radius:8px;border:1px solid #ccc}
 .summary{padding:18px;border-top:1px solid #eee;font-weight:800;background:#fafcff}
 .remove{background:#ff4d4d;border:none;color:white;padding:6px 10px;border-radius:8px;cursor:pointer}
 
-.checkout-page{
-display:none;
-max-width:700px;
-margin:140px auto;
-padding:35px;
-background:white;
-border-radius:24px;
-box-shadow:0 25px 60px rgba(0,0,0,.1);
-}
+.checkout-page{display:none;display:flex;flex-direction:column;gap:12px;max-width:700px;margin:140px 0 60px 40px;padding:35px;background:white;border-radius:24px;box-shadow:0 25px 60px rgba(0,0,0,.1)}
 .checkout-page.active{display:block}
-.checkout-item{
-display:flex;
-gap:15px;
-align-items:center;
-padding:12px;
-border-radius:14px;
-background:#fafcff;
-margin-bottom:15px;
-}
+.checkout-item{display:flex;gap:15px;align-items:center;padding:12px;border-radius:14px;background:#fafcff;margin-bottom:15px}
 .checkout-item img{width:65px;height:65px;border-radius:14px}
 .checkout-total{font-size:22px;font-weight:800;margin:20px 0}
-.checkout-page input,.checkout-page textarea{
-width:100%;padding:14px;margin-bottom:14px;border-radius:12px;border:1px solid #ddd
-}
+.checkout-page input,.checkout-page textarea{width:100%;padding:14px;margin-bottom:14px;border-radius:12px;border:1px solid #ddd}
 
-footer{
-text-align:center;
-padding:50px;
-background:linear-gradient(135deg,var(--accent),var(--accent2));
-color:white;
-margin-top:80px;
-box-shadow:0 -15px 50px rgba(0,0,0,.2);
-}
+footer{text-align:center;padding:50px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;margin-top:80px}
 
-@media(max-width:1000px){
-.layout{flex-direction:column}
-.cart{width:100%;position:relative;top:0}
-}
-/* MEGA GOD MODE UPGRADES */
-.product-glow{position:absolute;inset:0;background:radial-gradient(circle at center,rgba(10,99,216,.25),transparent 70%);pointer-events:none}
-.card{position:relative;overflow:hidden}
-.card:hover::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,99,216,.08),transparent);pointer-events:none}
-
-/* smooth cart slide animation */
-.cart{transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s}
-.cart:hover{transform:translateX(-6px) translateY(-4px)}
-
-/* mega pro buttons */
-.btn{background:linear-gradient(135deg,#0a63d8,#00c6ff);}
-
-/* floating product animation */
-.card{animation:fadeUp .8s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-
-/* glass checkout panel */
-.checkout-page{backdrop-filter:blur(20px)}
-
-/* dark mode toggle support */
-body.dark{background:#0f172a;color:white}
-body.dark .card{background:#1e293b;color:white}
-body.dark .cart{background:#1e293b;color:white}
-
-body.dark{background:#0f172a;color:white}
-body.dark h1,body.dark h2,body.dark h3,body.dark p,body.dark span,body.dark div{color:white}
-body.dark .card{background:#1e293b;color:white}
-body.dark .cart{background:#1e293b;color:white}
-body.dark .checkout-page{background:#1e293b;color:white}
-body.dark .cart-header{background:#0f172a;color:white}
-body.dark .summary{background:#0f172a;color:white}
+@media(max-width:1000px){.layout{flex-direction:column}.cart{width:100%;position:relative;top:0}}
+@media(max-width:768px){header{padding:0 15px;height:70px}.brand h1{font-size:18px}.layout{padding:0 12px;margin-top:100px}.grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}.thumb{height:160px}.checkout-page{margin:100px 12px;padding:20px}.checkout-item img{width:50px;height:50px}}
 </style>
 </head>
 <body>
 <header>
 <div class="brand">
-<img src="https://i.ibb.co/b5jdJzLy/Copy-of-Untitled-3-removebg-preview.png">
+<a href="#" onclick="showHome()"><img src="https://i.ibb.co/b5jdJzLy/Copy-of-Untitled-3-removebg-preview.png"></a>
 <h1>ExpressBuild Labs</h1>
 </div>
 <div class="header-actions">
+<a href="https://www.instagram.com/expressbuild.labs/"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" style="width:28px"></a>
+<a href="https://www.youtube.com/@expressbuild-labs"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" style="width:28px"></a>
+<a href="https://x.com/ExpressbuildLab"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" style="width:28px"></a>
 🛒 <span id="cartCount">0</span>
-<button class="btn" style="margin-left:15px" onclick="toggleTheme()">🌙</button>
+<button class="btn" onclick="toggleTheme()">🌙</button>
 </div>
 </header>
+
 <div class="layout">
 <div class="shop">
 <div class="controls">
@@ -202,6 +91,7 @@ body.dark .summary{background:#0f172a;color:white}
 </div>
 <div id="products" class="grid"></div>
 </div>
+
 <aside class="cart">
 <div class="cart-header">Your Cart</div>
 <div class="cart-body" id="cartItems"></div>
@@ -212,16 +102,34 @@ body.dark .summary{background:#0f172a;color:white}
 </div>
 </aside>
 </div>
+
 <div class="checkout-page" id="checkoutPage">
 <h2>Checkout</h2>
 <div id="orderSummary"></div>
 <div class="checkout-total">Total: <span id="checkoutTotal">0 JD</span></div>
 <input id="name" placeholder="Full Name">
 <input id="email" placeholder="Email">
-<textarea id="address" placeholder="Shipping Address"></textarea>
-<button class="btn" onclick="placeOrder()">Place Order</button>
-<button class="btn" style="margin-top:10px;background:#777" onclick="showHome()">Back</button>
+<div style="display:flex;gap:10px">
+<select id="countryCode" style="width:35%;padding:14px;border-radius:12px;border:1px solid #ddd">
+<option value="+962">Jordan +962</option>
+<option value="+970">Palestine +970</option>
+<option value="+961">Lebanon +961</option>
+<option value="+1">USA +1</option>
+<option value="+44">UK +44</option>
+</select>
+<input id="phone" placeholder="Phone Number" style="flex:1">
 </div>
+<input id="country" placeholder="Country">
+<textarea id="details" placeholder="More Order Details (optional)"></textarea>
+<textarea id="address" placeholder="Shipping Address"></textarea>
+
+<div style="margin-top:20px"><h3>Payment Method</h3>
+<div style="display:flex;flex-direction:column;gap:10px">
+<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="PayPal"> PayPal</label>
+<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="Cash"> Cash</label>
+<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="Stripe"> Stripe</label>
+</div></div>
+
 <script>
 const PRODUCTS=[
 {id:'bob-cat',name:'Bob the Cat',price:2,img:'https://i.ibb.co/GfJ4Lm7w/Bob-the-Cat.png'},
@@ -232,6 +140,7 @@ const PRODUCTS=[
 ];
 let cart=[];
 const money=n=>Number(n).toFixed(2);
+
 function renderProducts(filter=''){
 const grid=document.getElementById('products');
 grid.innerHTML='';
@@ -247,9 +156,11 @@ card.innerHTML=`<div class='thumb'><img src='${p.img}'></div><div class='card-bo
 grid.appendChild(card);
 });
 }
+
 function addToCart(id){const item=cart.find(i=>i.id===id);if(item)item.qty++;else cart.push({id,qty:1});renderCart();}
 function removeItem(i){cart.splice(i,1);renderCart();}
 function updateQty(i,val){cart[i].qty=parseInt(val)||1;renderCart();}
+
 function renderCart(){
 const container=document.getElementById('cartItems');container.innerHTML='';
 let subtotal=0,count=0;
@@ -265,23 +176,35 @@ document.getElementById('total').textContent=money(subtotal)+' JD';
 document.getElementById('checkoutTotal').textContent=money(subtotal)+' JD';
 document.getElementById('cartCount').textContent=count;
 }
+
 function goCheckout(){if(!cart.length){alert('Cart empty');return;}
 document.querySelector('.layout').style.display='none';document.getElementById('checkoutPage').classList.add('active');
 let html='';let total=0;
 cart.forEach(c=>{const p=PRODUCTS.find(x=>x.id===c.id);if(!p)return;total+=p.price*c.qty;html+=`<div class='checkout-item'><img src='${p.img}'><div><strong>${p.name}</strong><br>Qty: ${c.qty}<br>${money(p.price*c.qty)} JD</div></div>`;});
-document.getElementById('orderSummary').innerHTML=html;document.getElementById('checkoutTotal').textContent=money(total)+' JD';}
+document.getElementById('orderSummary').innerHTML=html;
+document.getElementById('checkoutTotal').textContent=money(total)+' JD';}
+
 function showHome(){document.getElementById('checkoutPage').classList.remove('active');document.querySelector('.layout').style.display='flex';}
+
 function placeOrder(){
 const name=document.getElementById('name').value.trim();
 const email=document.getElementById('email').value.trim();
+const phoneCode=document.getElementById('countryCode').value;
+const phone=document.getElementById('phone').value.trim();
+const country=document.getElementById('country').value.trim();
+const details=document.getElementById('details').value.trim();
 const address=document.getElementById('address').value.trim();
-if(!name||!email||!address||!cart.length){alert('Fill all fields');return;}
-let subtotal=0;
-let items=[];
-cart.forEach(c=>{const p=PRODUCTS.find(x=>x.id===c.id);if(!p)return;subtotal+=p.price*c.qty;items.push(`${p.name} x${c.qty} - ${money(p.price*c.qty)} JD`);});
+const payment=document.querySelector('input[name="payment"]:checked');
+if(!name||!email||!phone||!country||!address||!payment||!cart.length){alert('Fill all fields');return;}
+let subtotal=0;let items=[];
+cart.forEach(c=>{const p=PRODUCTS.find(x=>x.id===c.id);if(!p)return;subtotal+=p.price*c.qty;items.push(p.name+" x"+c.qty+" - "+money(p.price*c.qty)+" JD");});
 const formData=new FormData();
 formData.append('name',name);
 formData.append('email',email);
+formData.append('phone',phoneCode+' '+phone);
+formData.append('country',country);
+formData.append('payment',payment.value);
+formData.append('details',details);
 formData.append('address',address);
 formData.append('order',items.join('\n'));
 formData.append('total',money(subtotal)+' JD');
@@ -289,43 +212,16 @@ fetch('https://formspree.io/f/mwvnbnnl',{method:'POST',body:formData,headers:{'A
 .then(()=>{alert('Order sent!');cart=[];renderCart();showHome();})
 .catch(()=>alert('Order failed'));
 }
-document.getElementById('searchBar').addEventListener('input',e=>renderProducts(e.target.value));
-document.getElementById('sortSelect').addEventListener('change',()=>renderProducts(document.getElementById('searchBar').value));
+
 function toggleTheme(){document.body.classList.toggle('dark')}
+
 renderProducts();renderCart();
 </script>
 
-<footer style="text-align:center;padding:30px;background:#0a63d8;color:white;margin-top:60px">
+<footer>
 <img src="https://i.ibb.co/gb3nknGX/Untitled-design-31-modified.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:10px">
 <div>Express Studio © <span id="year"></span></div>
 </footer>
-
-<script>
-document.getElementById('year').textContent=new Date().getFullYear();
-</script>
-<script>
-// ULTRA INSANE MODE FEATURES
-// 3D tilt effect
-const cardsObserver=new MutationObserver(()=>{
-document.querySelectorAll('.card').forEach(card=>{
-card.onmousemove=e=>{
-const rect=card.getBoundingClientRect();
-const x=(e.clientX-rect.left)/rect.width-0.5;
-const y=(e.clientY-rect.top)/rect.height-0.5;
-card.style.transform=`perspective(800px) rotateY(${x*10}deg) rotateX(${y*-10}deg) scale(1.03)`;
-};
-card.onmouseleave=()=>{card.style.transform='';};
-});
-});
-cardsObserver.observe(document.body,{childList:true,subtree:true});
-
-// Cart toggle mobile style
-function toggleCart(){document.querySelector('.cart').classList.toggle('hidden-cart');}
-</script>
-
-<style>
-.hidden-cart{transform:translateX(120%);}
-.cart{transition:.4s cubic-bezier(.4,0,.2,1)}
-</style>
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 </body>
 </html>
