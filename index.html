@@ -49,7 +49,8 @@ header{position:fixed;top:0;left:0;right:0;height:80px;background:linear-gradien
 .summary{padding:18px;border-top:1px solid #eee;font-weight:800;background:#fafcff}
 .remove{background:#ff4d4d;border:none;color:white;padding:6px 10px;border-radius:8px;cursor:pointer}
 
-.checkout-page{display:none;display:flex;flex-direction:column;gap:12px;max-width:700px;margin:140px 0 60px 40px;padding:35px;background:white;border-radius:24px;box-shadow:0 25px 60px rgba(0,0,0,.1)}
+.checkout-page{display:none;max-width:700px;margin:140px auto 60px 40px;padding:35px;background:white;border-radius:24px;box-shadow:0 25px 60px rgba(0,0,0,.1)}
+.checkout-page.active{display:flex;flex-direction:column;gap:12px}
 .checkout-page.active{display:block}
 .checkout-item{display:flex;gap:15px;align-items:center;padding:12px;border-radius:14px;background:#fafcff;margin-bottom:15px}
 .checkout-item img{width:65px;height:65px;border-radius:14px}
@@ -218,10 +219,9 @@ function toggleTheme(){document.body.classList.toggle('dark')}
 renderProducts();renderCart();
 </script>
 
-<footer>
-<img src="https://i.ibb.co/gb3nknGX/Untitled-design-31-modified.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:10px">
-<div>Express Studio © <span id="year"></span></div>
-</footer>
+<div style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-weight:600;box-shadow:0 -10px 40px rgba(0,0,0,.2)">
+ExpressBuild Labs © <span id="year"></span>
+</div>
 <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 </body>
 </html>
