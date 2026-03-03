@@ -60,7 +60,8 @@ header{position:fixed;top:0;left:0;right:0;height:80px;background:linear-gradien
 footer{text-align:center;padding:50px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;margin-top:80px}
 
 @media(max-width:1000px){.layout{flex-direction:column}.cart{width:100%;position:relative;top:0}}
-@media(max-width:768px){header{padding:0 15px;height:70px}.brand h1{font-size:18px}.layout{padding:0 12px;margin-top:100px}.grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}.thumb{height:160px}.checkout-page{margin:100px 12px;padding:20px}.checkout-item img{width:50px;height:50px}}
+@media(max-width:768px){header{padding:0 15px;height:70px}.brand h1{font-size:18px}.layout{flex-direction:column;margin-top:100px;padding:0 10px}.grid{grid-template-columns:repeat(2,1fr)}.cart{width:100%;position:relative}.checkout-page{margin:100px 10px;padding:20px}.checkout-item img{width:50px;height:50px}.controls{flex-direction:column}}
+.brand h1{font-size:18px}.layout{padding:0 12px;margin-top:100px}.grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}.thumb{height:160px}.checkout-page{margin:100px 12px;padding:20px}.checkout-item img{width:50px;height:50px}}
 </style>
 </head>
 <body>
@@ -129,7 +130,10 @@ footer{text-align:center;padding:50px;background:linear-gradient(135deg,var(--ac
 <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="PayPal"> PayPal</label>
 <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="Cash"> Cash</label>
 <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="Stripe"> Stripe</label>
-</div></div>
+</div>
+</div>
+<button class="btn" style="margin-top:20px" onclick="placeOrder()">Place Order</button>
+<button class="btn" style="margin-top:10px;background:#777" onclick="showHome()">Back to Store</button></div>
 
 <script>
 const PRODUCTS=[
