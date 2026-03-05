@@ -281,30 +281,38 @@ document.getElementById('year').textContent=new Date().getFullYear();
 <div id="successPage" style="display:none;text-align:center;padding:120px 20px">
 <h1>🎉 Order Placed!</h1>
 <p style="font-size:18px;margin-top:10px">We will reach you shortly.</p>
-<button class="btn" onclick="showHome()" style="margin-top:25px">Go Back Home</button>
+<button class="btn" onclick="returnToStore()" style="margin-top:25px">Go Back Home</button>
 <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none"></canvas>
 </div>
 
 <script>
+// FIXED ORDER FLOW (prevents freezing)
 function placeOrder(){
-
 const checkout=document.getElementById("checkoutPage");
 const layout=document.querySelector(".layout");
+const success=document.getElementById("successPage");
 
 if(checkout) checkout.style.display="none";
 if(layout) layout.style.display="none";
 
-const success=document.getElementById("successPage");
-success.style.display="block";
+if(success) success.style.display="block";
 
 startConfetti();
 
+// Clear cart safely
 cart=[];
 renderCart();
 }
 
-function showHome(){
-location.reload();
+function returnToStore(){
+// Instead of reload (causes freezing bugs)
+const success=document.getElementById("successPage");
+const layout=document.querySelector(".layout");
+const checkout=document.getElementById("checkoutPage");
+
+if(success) success.style.display="none";
+if(checkout) checkout.classList.remove("active");
+if(layout) layout.style.display="flex";
 }
 
 function startConfetti(){
@@ -315,83 +323,31 @@ canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
 let pieces=[];
-
-for(let i=0;i<150;i++){
+for(let i=0;i<120;i++){
 pieces.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height-canvas.height,
-r:Math.random()*6+4
+ x:Math.random()*canvas.width,
+ y:Math.random()*canvas.height-canvas.height,
+ r:Math.random()*6+4
 });
 }
 
 function draw(){
 ctx.clearRect(0,0,canvas.width,canvas.height);
 
-for(let i=0;i<pieces.length;i++){
-let p=pieces[i];
-
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fillStyle="hsl("+Math.random()*360+",80%,60%)";
-ctx.fill();
-
-p.y+=3;
-
-if(p.y>canvas.height){
-p.y=-10;
-}
-}
+pieces.forEach(p=>{
+ ctx.beginPath();
+ ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ ctx.fillStyle="hsl("+Math.random()*360+",80%,60%)";
+ ctx.fill();
+ p.y+=3;
+ if(p.y>canvas.height) p.y=-10;
+});
 
 requestAnimationFrame(draw);
 }
 
 draw();
 }
-</script>
-
-<script>
-// Simple order system enhancement (non‑breaking)
-function generateOrderId(){
-  return Math.floor(10000 + Math.random()*90000);
-}
-
-function estimateTime(items){
-  const min = 10 + items*3;
-  const max = 15 + items*5;
-  return `${min}-${max} minutes`;
-}
-
-function handleOrderSummary(items){
-  const orderId = generateOrderId();
-  const time = estimateTime(items);
-
-  const deliveryType = prompt("Delivery or Pickup?");
-
-  const summary = `
-ORDER SUMMARY
-----------------------
-Order ID: ${orderId}
-Items: ${items}
-Type: ${deliveryType}
-Estimated Time: ${time}
-----------------------`;
-
-  alert(summary);
-
-  // send email (non blocking using mailto)
-  const body = encodeURIComponent(summary);
-  window.open(`mailto:YOUR_EMAIL_HERE?subject=New Order ${orderId}&body=${body}`);
-}
-
-// Hook into existing order buttons without rebuilding site
-window.addEventListener("load",()=>{
-  document.querySelectorAll("button, .order-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const items = document.querySelectorAll('.cart-item').length || 1;
-      handleOrderSummary(items);
-    });
-  });
-});
 </script>
 </body>
 </html>
