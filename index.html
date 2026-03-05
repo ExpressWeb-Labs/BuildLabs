@@ -137,10 +137,10 @@ footer{text-align:center;padding:50px;background:linear-gradient(135deg,var(--ac
 <textarea id="address" placeholder="Shipping Address"></textarea>
 
 <div style="margin-top:20px"><h3>Payment Method</h3>
-<div style="display:flex;flex-direction:column;gap:10px">
-<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="PayPal"> PayPal</label>
-<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="Cash"> Cash</label>
-<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="Stripe"> Stripe</label>
+<div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="stripe"> Stripe</label>
+<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="paypal"> PayPal</label>
+<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="click" checked> Click</label>
 </div>
 </div>
 <button class="btn" style="margin-top:20px" onclick="placeOrder()">Place Order</button>
@@ -277,5 +277,121 @@ sortSelect.addEventListener('change',()=>{renderProducts(searchBar?searchBar.val
 document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 
+<!-- Order Success Page -->
+<div id="successPage" style="display:none;text-align:center;padding:120px 20px">
+<h1>🎉 Order Placed!</h1>
+<p style="font-size:18px;margin-top:10px">We will reach you shortly.</p>
+<button class="btn" onclick="showHome()" style="margin-top:25px">Go Back Home</button>
+<canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none"></canvas>
+</div>
+
+<script>
+function placeOrder(){
+
+const checkout=document.getElementById("checkoutPage");
+const layout=document.querySelector(".layout");
+
+if(checkout) checkout.style.display="none";
+if(layout) layout.style.display="none";
+
+const success=document.getElementById("successPage");
+success.style.display="block";
+
+startConfetti();
+
+cart=[];
+renderCart();
+}
+
+function showHome(){
+location.reload();
+}
+
+function startConfetti(){
+const canvas=document.getElementById("confettiCanvas");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let pieces=[];
+
+for(let i=0;i<150;i++){
+pieces.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height-canvas.height,
+r:Math.random()*6+4
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+for(let i=0;i<pieces.length;i++){
+let p=pieces[i];
+
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fillStyle="hsl("+Math.random()*360+",80%,60%)";
+ctx.fill();
+
+p.y+=3;
+
+if(p.y>canvas.height){
+p.y=-10;
+}
+}
+
+requestAnimationFrame(draw);
+}
+
+draw();
+}
+</script>
+
+<script>
+// Simple order system enhancement (non‑breaking)
+function generateOrderId(){
+  return Math.floor(10000 + Math.random()*90000);
+}
+
+function estimateTime(items){
+  const min = 10 + items*3;
+  const max = 15 + items*5;
+  return `${min}-${max} minutes`;
+}
+
+function handleOrderSummary(items){
+  const orderId = generateOrderId();
+  const time = estimateTime(items);
+
+  const deliveryType = prompt("Delivery or Pickup?");
+
+  const summary = `
+ORDER SUMMARY
+----------------------
+Order ID: ${orderId}
+Items: ${items}
+Type: ${deliveryType}
+Estimated Time: ${time}
+----------------------`;
+
+  alert(summary);
+
+  // send email (non blocking using mailto)
+  const body = encodeURIComponent(summary);
+  window.open(`mailto:YOUR_EMAIL_HERE?subject=New Order ${orderId}&body=${body}`);
+}
+
+// Hook into existing order buttons without rebuilding site
+window.addEventListener("load",()=>{
+  document.querySelectorAll("button, .order-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const items = document.querySelectorAll('.cart-item').length || 1;
+      handleOrderSummary(items);
+    });
+  });
+});
+</script>
 </body>
 </html>
