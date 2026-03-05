@@ -3,8 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>ExpressBuild Labs — Store</title>
-<link rel="icon" type="image/png" href="https://i.ibb.co/b5jdJzLy/Copy-of-Untitled-3-removebg-preview
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" href="https://i.ibb.co/0jzLhSQW/Copy-of-Untitled-3-removebg-preview.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Favicon setup -->
+<link rel="icon" type="image/png" href="https://i.ibb.co/0jzLhSQW/Copy-of-Untitled-3-removebg-preview.png">
+<link rel="apple-touch-icon" href="https://i.ibb.co/0jzLhSQW/Copy-of-Untitled-3-removebg-preview.png">
+<link rel="shortcut icon" href="https://i.ibb.co/b5jdJzLy/Copy-of-Untitled-3-removebg-preview.png">
 <style>
 :root{
 --accent:#0a63d8;
@@ -66,6 +71,7 @@ footer{text-align:center;padding:50px;background:linear-gradient(135deg,var(--ac
 </style>
 </head>
 <body>
+<div id="mobileWarning" style="display:none;position:fixed;top:0;left:0;right:0;background:#ffb300;color:#000;font-weight:700;text-align:center;padding:10px;z-index:2000;">This site is ment for desktop</div>
 <header>
 <div class="brand">
 <a href="#" onclick="showHome()"><img src="https://i.ibb.co/b5jdJzLy/Copy-of-Untitled-3-removebg-preview.png"></a>
@@ -137,13 +143,25 @@ footer{text-align:center;padding:50px;background:linear-gradient(135deg,var(--ac
 <button class="btn" style="margin-top:10px;background:#777" onclick="showHome()">Back to Store</button></div>
 
 <script>
+// Mobile warning
+if(window.innerWidth < 768){
+ document.getElementById('mobileWarning').style.display='block';
+}
+window.addEventListener('resize',()=>{
+ if(window.innerWidth < 768){
+  document.getElementById('mobileWarning').style.display='block';
+ }else{
+  document.getElementById('mobileWarning').style.display='none';
+ }
+});
 const PRODUCTS=[
 {id:'bob-cat',name:'Bob the Cat',price:2,img:'https://i.ibb.co/GfJ4Lm7w/Bob-the-Cat.png'},
 {id:'bolt-mini',name:'Lightning Bolt Mini',price:0.5,img:'https://i.ibb.co/YF3P8TWw/Gemini-Generated-Image-nq2ej7nq2ej7nq2e-1.png'},
 {id:'s-clip',name:'S Cable Clip',price:1,img:'https://i.ibb.co/hFLjgPY6/20240316-163144.webp'},
 {id:'cat-bookmark',name:'Cat Bookmark',price:0.5,img:'https://i.ibb.co/RkxqC8V5/cat-bookmark-ver1.webp'},
 {id:'bob-dog',name:'Bob 2.0 - The Dog',price:2,img:'https://i.ibb.co/ZR3bMvQF/4473be69-c7a9-4b14-b3df-c21bf0973b19.webp'},
-{id:'mini-gojo',name:'Mini Gojo Figure (Transparent)',price:3,img:'https://i.ibb.co/DH4cp3VP/obraz-2026-02-22-215025033.webp'}
+{id:'mini-gojo',name:'Mini Gojo Figure (Transparent)',price:3,img:'https://i.ibb.co/DH4cp3VP/obraz-2026-02-22-215025033.webp'},
+{id:'shrek-croc',name:'Shrek Croc Jibit/Charm',price:1.5,img:'https://i.ibb.co/9z7mMrJ/Gemini-Generated-Image-cj1ch3cj1ch3cj1c-1.png'}
 ];
 let cart=[];
 const money=n=>Number(n).toFixed(2);
@@ -225,9 +243,11 @@ function toggleTheme(){document.body.classList.toggle('dark')}
 renderProducts();renderCart();
 </script>
 
-<div style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-weight:600;box-shadow:0 -10px 40px rgba(0,0,0,.2)">
-ExpressBuild Labs © <span id="year"></span>
-</div>
-<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+<div style="text-align:center;padding:20px 10px;font-weight:600;color:#666">ExpressBuild Labs © <span id="year"></span></div>
+
+<script>
+document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+
 </body>
 </html>
