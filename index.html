@@ -137,10 +137,10 @@ footer{text-align:center;padding:50px;background:linear-gradient(135deg,var(--ac
 <textarea id="address" placeholder="Shipping Address"></textarea>
 
 <div style="margin-top:20px"><h3>Payment Method</h3>
-<div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">
-<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="stripe"> Stripe</label>
-<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="paypal"> PayPal</label>
-<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="click" checked> Click</label>
+<div style="display:flex;flex-direction:column;gap:10px">
+<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="PayPal"> PayPal</label>
+<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="Cash"> Cash</label>
+<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="payment" value="Stripe"> Stripe</label>
 </div>
 </div>
 <button class="btn" style="margin-top:20px" onclick="placeOrder()">Place Order</button>
@@ -277,77 +277,5 @@ sortSelect.addEventListener('change',()=>{renderProducts(searchBar?searchBar.val
 document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 
-<!-- Order Success Page -->
-<div id="successPage" style="display:none;text-align:center;padding:120px 20px">
-<h1>🎉 Order Placed!</h1>
-<p style="font-size:18px;margin-top:10px">We will reach you shortly.</p>
-<button class="btn" onclick="returnToStore()" style="margin-top:25px">Go Back Home</button>
-<canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none"></canvas>
-</div>
-
-<script>
-// FIXED ORDER FLOW (prevents freezing)
-function placeOrder(){
-const checkout=document.getElementById("checkoutPage");
-const layout=document.querySelector(".layout");
-const success=document.getElementById("successPage");
-
-if(checkout) checkout.style.display="none";
-if(layout) layout.style.display="none";
-
-if(success) success.style.display="block";
-
-startConfetti();
-
-// Clear cart safely
-cart=[];
-renderCart();
-}
-
-function returnToStore(){
-// Instead of reload (causes freezing bugs)
-const success=document.getElementById("successPage");
-const layout=document.querySelector(".layout");
-const checkout=document.getElementById("checkoutPage");
-
-if(success) success.style.display="none";
-if(checkout) checkout.classList.remove("active");
-if(layout) layout.style.display="flex";
-}
-
-function startConfetti(){
-const canvas=document.getElementById("confettiCanvas");
-const ctx=canvas.getContext("2d");
-
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let pieces=[];
-for(let i=0;i<120;i++){
-pieces.push({
- x:Math.random()*canvas.width,
- y:Math.random()*canvas.height-canvas.height,
- r:Math.random()*6+4
-});
-}
-
-function draw(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-pieces.forEach(p=>{
- ctx.beginPath();
- ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
- ctx.fillStyle="hsl("+Math.random()*360+",80%,60%)";
- ctx.fill();
- p.y+=3;
- if(p.y>canvas.height) p.y=-10;
-});
-
-requestAnimationFrame(draw);
-}
-
-draw();
-}
-</script>
 </body>
 </html>
