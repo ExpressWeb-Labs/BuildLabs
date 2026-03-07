@@ -36,7 +36,10 @@ header{position:fixed;top:0;left:0;right:0;height:80px;background:linear-gradien
 .card{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 15px 40px rgba(0,0,0,.07)}
 .card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 25px 55px rgba(0,0,0,.12)}
 
-.thumb{height:210px;background:#eef4ff;display:flex;align-items:center;justify-content:center}
+.thumb{height:210px;background:#eef4ff;display:flex;align-items:center;justify-content:center;position:relative}
+.badge{position:absolute;top:10px;left:10px;background:#ff3b3b;color:white;font-weight:800;font-size:12px;padding:6px 10px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.2)}
+.badge.new{background:#00c853}
+.badge.hot{background:#ff9800}
 .thumb img{width:100%;height:100%;object-fit:contain;padding:12px}
 .card-body{padding:18px;display:flex;flex-direction:column;gap:10px}
 .title{font-weight:800;font-size:18px}
@@ -90,10 +93,36 @@ footer{text-align:center;padding:50px;background:linear-gradient(135deg,var(--ac
 </div>
 </header>
 
+<!-- Premium Background Music -->
+
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_6a3e7a1f1f.mp3" type="audio/mp3">
+</audio>
+
+<script>
+const music=document.getElementById('bgMusic');
+let musicStarted=false;
+function toggleMusic(){
+ if(!musicStarted){music.play();music.volume=0.1;musicStarted=true;}
+ else if(music.paused){music.play();}
+ else {music.pause();}
+}
+// Start music on first user interaction (browser safe)
+document.addEventListener('click',()=>{
+ if(!musicStarted){music.play().catch(()=>{});music.volume=0.1;musicStarted=true;}
+},{once:true});
+</script>
+
 <div class="layout">
 <div class="shop">
 <div class="controls">
 <input id="searchBar" class="search" placeholder="Search products...">
+<select id="categorySelect" style="padding:12px;border-radius:10px;border:1px solid #ccd6f6">
+<option value="all">All Categories</option>
+<option value="minecraft">Minecraft</option>
+<option value="animal">Animals</option>
+<option value="decoration">Decorations</option>
+</select>
 <select id="sortSelect" style="padding:12px;border-radius:10px;border:1px solid #ccd6f6">
 <option value="default">Sort By</option>
 <option value="price-low">Price: Low to High</option>
@@ -158,14 +187,21 @@ window.addEventListener('resize',()=>{
  }
 });
 const PRODUCTS=[
-{id:'bob-cat',name:'Bob the Cat',price:2,img:'https://i.ibb.co/GfJ4Lm7w/Bob-the-Cat.png'},
+{id:'bob-cat',name:'Bob the Cat',category:'animal',price:2,img:'https://i.ibb.co/GfJ4Lm7w/Bob-the-Cat.png'},
 {id:'bolt-mini',name:'Lightning Bolt Mini',price:0.5,oldPrice:1,img:'https://i.ibb.co/YF3P8TWw/Gemini-Generated-Image-nq2ej7nq2ej7nq2e-1.png'},
 {id:'s-clip',name:'S Cable Clip',price:1,oldPrice:2,img:'https://i.ibb.co/hFLjgPY6/20240316-163144.webp'},
 {id:'cat-bookmark',name:'Cat Bookmark',price:0.5,oldPrice:1,img:'https://i.ibb.co/RkxqC8V5/cat-bookmark-ver1.webp'},
-{id:'bob-dog',name:'Bob 2.0 - The Dog',price:2,img:'https://i.ibb.co/ZR3bMvQF/4473be69-c7a9-4b14-b3df-c21bf0973b19.webp'},
+{id:'bob-dog',name:'Bob 2.0 - The Dog',category:'animal',price:2,img:'https://i.ibb.co/ZR3bMvQF/4473be69-c7a9-4b14-b3df-c21bf0973b19.webp'},
 {id:'mini-gojo',name:'Mini Gojo Figure (Transparent)',price:2.5,img:'https://i.ibb.co/DH4cp3VP/obraz-2026-02-22-215025033.webp',img:'https://i.ibb.co/DH4cp3VP/obraz-2026-02-22-215025033.webp'},
 {id:'violin-keychain',name:'Violin Keychain',price:1.5,oldPrice:3,img:'https://i.ibb.co/DD9LzZD0/Gemini-Generated-Image-gm0fzsgm0fzsgm0f-1.png'},
-{id:'ninja-star',name:'Ninja Star',price:2,oldPrice:3,img:'https://i.ibb.co/m5mZy6CR/Gemini-Generated-Image-h79jy9h79jy9h79j-1.png'}
+{id:'ninja-star',name:'Ninja Star',price:2,oldPrice:3,img:'https://i.ibb.co/m5mZy6CR/Gemini-Generated-Image-h79jy9h79jy9h79j-1.png'},
+{id:'baby-yoda',name:'Baby Yoda',price:2,oldPrice:3,img:'https://i.ibb.co/LzgR1gXf/babyoda2.png'},
+{id:'golden-retriever',name:'Golden Retriever',category:'animal',price:2.5,oldPrice:3,img:'https://i.ibb.co/k2sJmqd0/neuvodoge3.jpg'},
+{id:'transparent-parrot',name:'Parrot',category:'animal',price:2,oldPrice:3.25,img:'https://i.ibb.co/fzg6D1Xz/img-4486-zoom-sat.jpg'},
+{id:'minecraft-chicken',name:'Minecraft Chicken',category:'minecraft',price:1,oldPrice:2,img:'https://i.ibb.co/Qj1zVYBz/20230301-174959-1.webp'},
+{id:'minecraft-axolotl',name:'Minecraft Axolotl',category:'minecraft',price:2,oldPrice:3.5,badge:'SALE',img:'https://i.ibb.co/Mk3qNcTn/20230301-175008.webp'},
+{id:'minecraft-bundle',name:'Minecraft Chicken + Axolotl Bundle',category:'minecraft',price:2.75,oldPrice:4,badge:'BEST DEAL',img:'https://i.ibb.co/Qj1zVYBz/20230301-174959-1.webp'},
+{id:'peg-holder-2pcs',name:'Peg Board Extension Cord Holder (2 pcs)',category:'decoration',price:2,oldPrice:0,img:'https://i.ibb.co/HTTSNpMx/20260307-120122.webp'}
 ];
 let cart=[];
 const money=n=>Number(n).toFixed(2);
@@ -173,7 +209,8 @@ const money=n=>Number(n).toFixed(2);
 function renderProducts(filter=''){
 const grid=document.getElementById('products');
 grid.innerHTML='';
-let filtered=PRODUCTS.filter(p=>p.name.toLowerCase().includes(filter.toLowerCase()));
+const cat=document.getElementById('categorySelect')?document.getElementById('categorySelect').value:'all';
+let filtered=PRODUCTS.filter(p=>p.name.toLowerCase().includes(filter.toLowerCase()) && (cat==='all' || p.category===cat));
 const sort=document.getElementById('sortSelect').value;
 if(sort==='price-low') filtered.sort((a,b)=>a.price-b.price);
 if(sort==='price-high') filtered.sort((a,b)=>b.price-a.price);
@@ -193,7 +230,14 @@ return;
 filtered.forEach(p=>{
 let priceDisplay = p.oldPrice ? `<span style="text-decoration:line-through;color:#888;font-size:14px">${money(p.oldPrice)} JD</span> <span style="color:var(--accent);font-weight:800">${money(p.price)} JD</span>` : `<span style="color:var(--accent);font-weight:800">${money(p.price)} JD</span>`;
 const card=document.createElement('div');card.className='card';
-card.innerHTML=`<div class='thumb'><img src='${p.img}'></div><div class='card-body'><div class='title'>${p.name}</div><div class='price'>${priceDisplay}</div><button class='btn' onclick="addToCart('${p.id}')">Add to Cart</button></div>`;
+let badge='';
+if(p.price <= 1) badge="<div class='badge hot'>HOT</div>";
+
+if(p.badge) badge=`<div class='badge'>${p.badge}</div>`;
+else if(p.oldPrice) badge="<div class='badge'>SALE</div>";
+else if(p.id==='peg-holder-2pcs') badge="<div class='badge new'>NEW</div>";
+else if(p.id==='transparent-parrot') badge="<div class='badge new'>NEW</div>";
+card.innerHTML=`<div class='thumb'>${badge}<img src='${p.img}'></div><div class='card-body'><div class='title'>${p.name}${p.id==='minecraft-chicken' ? " <img src='https://art.pixilart.com/48da5ba0b6eb389.png' style='width:18px;height:18px;vertical-align:middle;margin-left:6px'>" : ''}</div><div class='price'>${priceDisplay}</div><button class='btn' onclick="addToCart('${p.id}')">Add to Cart</button></div>`;
 grid.appendChild(card);
 });
 }
@@ -266,16 +310,79 @@ if(searchBar){
 searchBar.addEventListener('input',()=>{renderProducts(searchBar.value);});
 }
 
+let categorySelect2=document.getElementById('categorySelect');
+if(categorySelect){categorySelect.addEventListener('change',()=>{renderProducts(searchBar?searchBar.value:'');});}
+
 if(sortSelect){
 sortSelect.addEventListener('change',()=>{renderProducts(searchBar?searchBar.value:'');});
 }
 </script>
 
-<div style="text-align:center;padding:20px 10px;font-weight:600;color:#666">ExpressBuild Labs © <span id="year"></span></div>
+<div style="text-align:center;padding:20px 10px;font-weight:600;color:#666">
+ExpressBuild Labs © <span id="year"></span>
+</div>
 
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 
+<script>
+// Minecraft category background override
+const minecraftBg = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTA4c2JwNHpzaGNtNjU0MWN1MmR3MDRyY3pvN2I0bXlweWhta3RuZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/r8GMmlV8qGrfZ3txfX/giphy.gif";
+
+function updateCategoryBackground(){
+ const cat = document.getElementById('categorySelect');
+ if(!cat) return;
+ if(cat.value === 'minecraft'){
+   document.body.style.backgroundImage = `url(${minecraftBg})`;
+   document.body.style.backgroundSize = 'cover';
+   document.body.style.backgroundPosition = 'center';
+   document.body.style.backgroundAttachment = 'fixed';
+ } else {
+   document.body.style.backgroundImage = '';
+ }
+}
+
+const catSelect = document.getElementById('categorySelect');
+if(catSelect){
+ catSelect.addEventListener('change', updateCategoryBackground);
+}
+</script>
+
+<!-- Minecraft Category Music -->
+<audio id="minecraftMusic" loop>
+  <source src="https://files.catbox.moe/7mn83y.MP3" type="audio/mp3">
+</audio>
+
+<script>
+const minecraftMusic=document.getElementById('minecraftMusic');
+const categorySelect=document.getElementById('categorySelect');
+
+function handleMinecraftMusic(){
+ if(!minecraftMusic) return;
+ if(categorySelect && categorySelect.value==='minecraft'){
+   minecraftMusic.volume=0.3;
+   minecraftMusic.play().catch(()=>{});
+ } else {
+   minecraftMusic.pause();
+   minecraftMusic.currentTime=0;
+ }
+}
+
+if(categorySelect){
+ categorySelect.addEventListener('change',handleMinecraftMusic);
+}
+</script>
+<!-- Background Music -->
+<audio id="bgMusic" loop>
+<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_6a3e7a1f1f.mp3" type="audio/mp3">
+</audio>
+<script>
+const bgMusic=document.getElementById('bgMusic');
+let musicPlayed=false;
+document.addEventListener('click',()=>{
+ if(!musicPlayed){bgMusic.volume=0.1;bgMusic.play().catch(()=>{});musicPlayed=true;}
+});
+</script>
 </body>
 </html>
