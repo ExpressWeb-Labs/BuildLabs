@@ -187,12 +187,14 @@ window.addEventListener('resize',()=>{
  }
 });
 const PRODUCTS=[
+{id:'cute-owl', name:'Cute Owl', category:'animal', price:2, oldPrice:3, img:'https://i.ibb.co/Z6Vr7SHr/low-poly-eule-2.webp'},
 {id:'bob-cat',name:'Bob the Cat',category:'animal',price:2,img:'https://i.ibb.co/GfJ4Lm7w/Bob-the-Cat.png'},
 {id:'bolt-mini',name:'Lightning Bolt Mini',price:0.5,oldPrice:1,img:'https://i.ibb.co/YF3P8TWw/Gemini-Generated-Image-nq2ej7nq2ej7nq2e-1.png'},
+{id:'Bear',name:'Cute Bear', category:'animal',price:2,oldPrice:3,img:'https://i.ibb.co/50RP2xx/pxl-20220118-122936674.webp'},
 {id:'s-clip',name:'S Cable Clip',price:1,oldPrice:2,img:'https://i.ibb.co/hFLjgPY6/20240316-163144.webp'},
-{id:'cat-bookmark',name:'Cat Bookmark',price:0.5,oldPrice:1,img:'https://i.ibb.co/RkxqC8V5/cat-bookmark-ver1.webp'},
+{id:'cat-bookmark',name:'Cat Bookmark', category:'animal',price:0.5,oldPrice:1,img:'https://i.ibb.co/RkxqC8V5/cat-bookmark-ver1.webp'},
 {id:'bob-dog',name:'Bob 2.0 - The Dog',category:'animal',price:2,img:'https://i.ibb.co/ZR3bMvQF/4473be69-c7a9-4b14-b3df-c21bf0973b19.webp'},
-{id:'mini-gojo',name:'Mini Gojo Figure (Transparent)',price:2.5,img:'https://i.ibb.co/DH4cp3VP/obraz-2026-02-22-215025033.webp',img:'https://i.ibb.co/DH4cp3VP/obraz-2026-02-22-215025033.webp'},
+{id:'mini-gojo',name:'Mini Gojo Figure (Transparent)',price:2.5,oldPrice:3,img:'https://i.ibb.co/DH4cp3VP/obraz-2026-02-22-215025033.webp'},
 {id:'violin-keychain',name:'Violin Keychain',price:1.5,oldPrice:3,img:'https://i.ibb.co/DD9LzZD0/Gemini-Generated-Image-gm0fzsgm0fzsgm0f-1.png'},
 {id:'ninja-star',name:'Ninja Star',price:2,oldPrice:3,img:'https://i.ibb.co/m5mZy6CR/Gemini-Generated-Image-h79jy9h79jy9h79j-1.png'},
 {id:'baby-yoda',name:'Baby Yoda',price:2,oldPrice:3,img:'https://i.ibb.co/LzgR1gXf/babyoda2.png'},
@@ -201,7 +203,8 @@ const PRODUCTS=[
 {id:'minecraft-chicken',name:'Minecraft Chicken',category:'minecraft',price:1,oldPrice:2,img:'https://i.ibb.co/Qj1zVYBz/20230301-174959-1.webp'},
 {id:'minecraft-axolotl',name:'Minecraft Axolotl',category:'minecraft',price:2,oldPrice:3.5,badge:'SALE',img:'https://i.ibb.co/Mk3qNcTn/20230301-175008.webp'},
 {id:'minecraft-bundle',name:'Minecraft Chicken + Axolotl Bundle',category:'minecraft',price:2.75,oldPrice:4,badge:'BEST DEAL',img:'https://i.ibb.co/Qj1zVYBz/20230301-174959-1.webp'},
-{id:'peg-holder-2pcs',name:'Peg Board Extension Cord Holder (2 pcs)',category:'decoration',price:2,oldPrice:0,img:'https://i.ibb.co/HTTSNpMx/20260307-120122.webp'}
+{id:'minecraft-frog',name:'Minecraft Frog',category:'minecraft',price:1.5,oldPrice:2,badge:'SALE',img:'https://media.printables.com/media/prints/635383/images/5026941_a75c2bc9-0856-4c68-ae84-91d649a196d6_43e681fb-57db-4250-8b7e-e9a427e9378d/thumbs/inside/1280x960/jpg/d4cd42e6-c6f9-4874-a651-b8c5f597aa97.webp'},
+{id:'peg-holder-2pcs',name:'Peg Board Extension Cord Holder (2 pcs)',category:'decoration',price:2,oldPrice:3,img:'https://i.ibb.co/HTTSNpMx/20260307-120122.webp'}
 ];
 let cart=[];
 const money=n=>Number(n).toFixed(2);
@@ -220,7 +223,7 @@ if(sort==='name-desc') filtered.sort((a,b)=>b.name.localeCompare(a.name));
 // No results UI
 if(filtered.length===0){
 grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#777;font-weight:600">
-<div style="font-size:50px;margin-bottom:15px">🔍❌</div>
+<div style="font-size:50px;margin-bottom:15px">❌</div>
 <h2>No results found</h2>
 <p>We can't find any items matching your search</p>
 </div>`;
@@ -351,7 +354,7 @@ if(catSelect){
 
 <!-- Minecraft Category Music -->
 <audio id="minecraftMusic" loop>
-  <source src="https://files.catbox.moe/7mn83y.MP3" type="audio/mp3">
+  <source src="https://files.catbox.moe/flbnpy.MP3" type="audio/mp3">
 </audio>
 
 <script>
