@@ -5,6 +5,9 @@
 <title>ExpressBuild Labs — Premium 3D Prints</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <link rel="icon" type="image/png" href="https://i.ibb.co/0jzLhSQW/Copy-of-Untitled-3-removebg-preview.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --accent: #0a63d8;
@@ -17,7 +20,7 @@
 }
 
 * { box-sizing: border-box; font-family: 'Inter', Segoe UI, sans-serif; transition: 0.2s ease; -webkit-tap-highlight-color: transparent; }
-html { -webkit-text-size-adjust: 100%; }
+html[dir="rtl"] body, html[dir="rtl"] * { font-family: 'Tajawal', 'Segoe UI', sans-serif !important; }
 body { margin: 0; background: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 body.dark { --bg: #0f172a; --text-main: #f8fafc; --text-muted: #94a3b8; --card-bg: #1e293b; --cart-bg: #1e293b; }
 button, .cat-pill, .qty-btn { touch-action: manipulation; }
@@ -53,6 +56,10 @@ body.dark .cart-btn:hover { background: var(--accent); color: white; }
 .icon-btn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 8px; border-radius: 50%; color: var(--text-main); }
 .icon-btn:hover { background: rgba(0,0,0,0.05); }
 body.dark .icon-btn:hover { background: rgba(255,255,255,0.1); }
+
+.lang-btn { background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--accent); padding: 8px 16px; border-radius: 50px; font-weight: 800; cursor: pointer; font-size: 14px; white-space: nowrap; }
+.lang-btn:hover { background: var(--accent); color: white; transform: scale(1.05); }
+body.dark .lang-btn { background: #1e293b; }
 
 /* V2 Hero Section */
 .hero-container { max-width: 1400px; margin: 100px auto 30px; padding: 0 20px; }
@@ -192,16 +199,27 @@ body.dark .success-content { background: #1e293b; }
 }
 .shake { animation: shake 0.4s ease; }
 
+/* RTL Support */
+html[dir="rtl"] .search-icon { left: auto; right: 14px; }
+html[dir="rtl"] .search-input { padding: 10px 40px 10px 16px; }
+html[dir="rtl"] .badge { left: auto; right: 12px; }
+html[dir="rtl"] .cart-drawer { right: auto; left: -100%; box-shadow: 10px 0 30px rgba(0,0,0,0.1); }
+html[dir="rtl"] .cart-drawer.active { left: 0; right: auto; }
+html[dir="rtl"] .checkout-total { text-align: left; }
+html[dir="rtl"] .old-price, html[dir="rtl"] .new-price { direction: ltr; unicode-bidi: isolate; }
+
 /* Responsive adjustments */
 @media(max-width: 768px) {
   .brand h1 { display: none; }
   .brand img { width: 38px; height: 38px; }
   .search-container { margin: 0 10px; max-width: none; }
   .search-input { padding: 12px 16px 12px 38px; font-size: 16px; }
-  .header-actions { gap: 8px; }
+  html[dir="rtl"] .search-input { padding: 12px 38px 12px 16px; }
+  .header-actions { gap: 6px; }
   .header-actions a { display: none; }
-  .cart-btn { padding: 10px 14px; font-size: 14px; }
-  .icon-btn { font-size: 18px; padding: 10px; }
+  .cart-btn { padding: 10px 12px; font-size: 13px; }
+  .lang-btn { padding: 8px 10px; font-size: 12px; }
+  .icon-btn { font-size: 18px; padding: 8px; }
 
   .hero-container { margin: 90px auto 20px; padding: 0 14px; }
   .hero { padding: 40px 20px; border-radius: 18px; }
@@ -269,7 +287,7 @@ body.dark .success-content { background: #1e293b; }
   
   <div class="search-container">
     <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" class="search-input" placeholder="Search for Minecraft, animals..." oninput="handleSearch(event)">
+    <input type="text" id="searchInput" class="search-input" data-i18n-placeholder="searchPlaceholder" placeholder="Search for Minecraft, animals..." oninput="handleSearch(event)">
   </div>
 
   <div class="header-actions">
@@ -278,22 +296,23 @@ body.dark .success-content { background: #1e293b; }
     <a href="https://x.com/ExpressbuildLab" target="_blank" title="X (Twitter)"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="X"></a>
     
     <button class="cart-btn" onclick="toggleCart()">🛒 <span id="cartCount">0</span></button>
+    <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">العربية</button>
     <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
   </div>
 </header>
 
 <div class="hero-container">
   <div class="hero">
-    <h2>Premium 3D Printed Creations</h2>
-    <p class="location">Designed and Printed in Jordan 🇯🇴</p>
+    <h2 data-i18n="heroTitle">Premium 3D Printed Creations</h2>
+    <p class="location" data-i18n="heroLocation">Designed and Printed in Jordan 🇯🇴</p>
     
     <div class="trust-bullets">
-      <span>✔ High-quality PLA</span>
-      <span>✔ Printed fresh on order</span>
-      <span>✔ Fast local delivery</span>
+      <span data-i18n="trust1">✔ High-quality PLA</span>
+      <span data-i18n="trust2">✔ Printed fresh on order</span>
+      <span data-i18n="trust3">✔ Fast local delivery</span>
     </div>
     
-    <button class="hero-btn" onclick="document.getElementById('shop').scrollIntoView({behavior: 'smooth'})">
+    <button class="hero-btn" data-i18n="shopNowBtn" onclick="document.getElementById('shop').scrollIntoView({behavior: 'smooth'})">
       Shop Now
     </button>
   </div>
@@ -301,11 +320,11 @@ body.dark .success-content { background: #1e293b; }
 
 <div class="categories-wrapper" id="shop">
   <div class="categories" id="categoryContainer">
-    <button class="cat-pill active" onclick="filterCategory('all', this)">♾️ All Items</button>
-    <button class="cat-pill" onclick="filterCategory('animal', this)">🐱 Animals</button>
-    <button class="cat-pill" onclick="filterCategory('minecraft', this)">🎮 Minecraft</button>
-    <button class="cat-pill" onclick="filterCategory('fidget', this)">⚙️ Fidgets</button>
-    <button class="cat-pill" onclick="filterCategory('decoration', this)">🏠 Decor</button>
+    <button class="cat-pill active" data-i18n="catAll" onclick="filterCategory('all', this)">♾️ All Items</button>
+    <button class="cat-pill" data-i18n="catAnimals" onclick="filterCategory('animal', this)">🐱 Animals</button>
+    <button class="cat-pill" data-i18n="catMinecraft" onclick="filterCategory('minecraft', this)">🎮 Minecraft</button>
+    <button class="cat-pill" data-i18n="catFidgets" onclick="filterCategory('fidget', this)">⚙️ Fidgets</button>
+    <button class="cat-pill" data-i18n="catDecor" onclick="filterCategory('decoration', this)">🏠 Decor</button>
   </div>
 </div>
 
@@ -319,7 +338,7 @@ body.dark .success-content { background: #1e293b; }
 <div class="cart-overlay" onclick="toggleCart()"></div>
 <div class="cart-drawer">
   <div class="cart-header">
-    <h2>Your Cart</h2>
+    <h2 data-i18n="yourCart">Your Cart</h2>
     <button class="close-cart" onclick="toggleCart()">✕</button>
   </div>
   
@@ -336,10 +355,10 @@ body.dark .success-content { background: #1e293b; }
 
   <div class="cart-footer">
     <div class="subtotal">
-      <span>Total:</span>
+      <span data-i18n="total">Total:</span>
       <span id="cartTotal">0.00 JD</span>
     </div>
-    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+    <button class="checkout-btn" data-i18n="proceedCheckout" onclick="checkout()">Proceed to Checkout</button>
   </div>
 </div>
 
@@ -350,79 +369,195 @@ body.dark .success-content { background: #1e293b; }
 <div class="success-modal" id="successModal">
   <div class="success-content">
     <div class="success-icon">🎉</div>
-    <div class="success-message">ORDER PLACED!</div>
-    <div class="success-subtext">WE WILL SEND YOU A CONFIRMATION MESSAGE</div>
-    <div class="redirect-notice">Returning to main page in <span id="countdown">5</span> seconds...</div>
+    <div class="success-message" data-i18n="orderPlaced">ORDER PLACED!</div>
+    <div class="success-subtext" data-i18n="orderConfirmMsg">WE WILL SEND YOU A CONFIRMATION MESSAGE</div>
+    <div class="redirect-notice"><span data-i18n="returningIn">Returning to main page in</span> <span id="countdown">5</span> <span data-i18n="seconds">seconds...</span></div>
   </div>
 </div>
 
 <!-- Checkout Page -->
 <div class="checkout-page" id="checkoutPage">
   <div class="checkout-card">
-    <h2>Checkout</h2>
+    <h2 data-i18n="checkoutTitle">Checkout</h2>
     <div id="orderSummary"></div>
-    <div class="checkout-total">Total: <span id="checkoutTotal">0.00 JD</span></div>
+    <div class="checkout-total"><span data-i18n="total">Total:</span> <span id="checkoutTotal">0.00 JD</span></div>
 
-    <input id="ckName" placeholder="Full Name">
-    <input id="ckEmail" placeholder="Email" type="email">
+    <input id="ckName" data-i18n-placeholder="fullName" placeholder="Full Name">
+    <input id="ckEmail" data-i18n-placeholder="email" placeholder="Email" type="email">
     <div class="phone-row">
       <select id="ckCountryCode">
-        <option value="+962">Jordan +962</option>
-        <option value="+970">Palestine +970</option>
-        <option value="+961">Lebanon +961</option>
-        <option value="+1">USA +1</option>
-        <option value="+44">UK +44</option>
+        <option value="+962" data-i18n="jordan">Jordan +962</option>
+        <option value="+970" data-i18n="palestine">Palestine +970</option>
+        <option value="+961" data-i18n="lebanon">Lebanon +961</option>
+        <option value="+1" data-i18n="usa">USA +1</option>
+        <option value="+44" data-i18n="uk">UK +44</option>
       </select>
-      <input id="ckPhone" placeholder="Phone Number">
+      <input id="ckPhone" data-i18n-placeholder="phoneNumber" placeholder="Phone Number">
     </div>
-    <input id="ckCountry" placeholder="Country">
-    <textarea id="ckAddress" placeholder="Shipping Address"></textarea>
-    <textarea id="ckDetails" placeholder="More Order Details (optional)"></textarea>
+    <input id="ckCountry" data-i18n-placeholder="country" placeholder="Country">
+    <textarea id="ckAddress" data-i18n-placeholder="shippingAddress" placeholder="Shipping Address"></textarea>
+    <textarea id="ckDetails" data-i18n-placeholder="moreDetails" placeholder="More Order Details (optional)"></textarea>
 
-    <h3 style="margin-bottom: 10px;">Payment Method</h3>
+    <h3 style="margin-bottom: 10px;" data-i18n="paymentMethod">Payment Method</h3>
     <div class="payment-options">
-      <label class="payment-option"><input type="radio" name="ckPayment" value="PayPal"> PayPal</label>
-      <label class="payment-option"><input type="radio" name="ckPayment" value="Cash"> Cash</label>
-      <label class="payment-option"><input type="radio" name="ckPayment" value="Stripe"> Stripe</label>
+      <label class="payment-option"><input type="radio" name="ckPayment" value="PayPal"> <span data-i18n="paypal">PayPal</span></label>
+      <label class="payment-option"><input type="radio" name="ckPayment" value="Cash"> <span data-i18n="cash">Cash</span></label>
+      <label class="payment-option"><input type="radio" name="ckPayment" value="Stripe"> <span data-i18n="stripe">Stripe</span></label>
     </div>
 
     <div class="checkout-actions">
-      <button class="checkout-btn" style="flex:1" onclick="placeOrder()">Place Order</button>
-      <button class="checkout-btn btn-secondary" onclick="showShop()">Back to Store</button>
+      <button class="checkout-btn" style="flex:1" data-i18n="placeOrder" onclick="placeOrder()">Place Order</button>
+      <button class="checkout-btn btn-secondary" data-i18n="backToStore" onclick="showShop()">Back to Store</button>
     </div>
   </div>
 </div>
 
 <footer class="site-footer">
-  <p>ExpressBuild Labs © 2026</p>
-  <p>Crafting quality products with care. Secure Checkout.</p>
+  <p data-i18n="footerBrand">ExpressBuild Labs © 2026</p>
+  <p data-i18n="footerTagline">Crafting quality products with care. Secure Checkout.</p>
 </footer>
 
 <script>
 // Catalog Data
 const PRODUCTS = [
-  {id:'cute-owl', name:'Cute Owl', category:'animal', price:2, oldPrice:3, img:'https://i.ibb.co/Z6Vr7SHr/low-poly-eule-2.webp', subtitle:'Perfect desk companion.', reviews: 142, rating: 4.9, badge: '⭐ Best Seller'},
-  {id:'Triangle-Fidget',name:'Triangle Fidget', category:'fidget', price:3,oldPrice:3.5,img:'https://i.ibb.co/Myrpn1wH/triangle.webp', subtitle: 'Smooth folding action for focus.', reviews: 89, rating: 4.8, badge: '🔥 Trending'},
-  {id:'Creeper',name:'Creeper Infinite Cube',category:'minecraft' ,price:3.5,oldPrice:5,img:'https://media.printables.com/media/prints/377695/images/3173509_fb4285ad-6902-4a1b-a4d9-bc8aa4137bf0/thumbs/inside/1280x960/jpg/pxl_20230122_230019554.webp', subtitle: 'Folds endlessly. A fan favorite.', reviews: 312, rating: 5.0, badge: '⭐ Best Seller'},
-  {id:'Flexi-KeyChain',name:'Flexi Keychain', category:'fidget', price:3,oldPrice:3.5,img:'https://i.ibb.co/svH5F35Q/Gemini-Generated-Image-ny1ykfny1ykfny1y.png', subtitle: 'Satisfying tactile flex.', reviews: 45, rating: 4.7, badge: ''},
-  {id:'Flexi-Dino',name:'Flexi Dino', category:'fidget', price:3.5,oldPrice:4,img:'https://i.ibb.co/3YcDfNCc/5e04faf6b1ebee0735ffb82771ca9051-display-large-46.webp', subtitle: 'Articulated joints that wiggle.', reviews: 204, rating: 4.7, badge: ''},
-  {id:'bob-cat',name:'Bob the Cat',category:'animal',price:2, oldPrice: 2.5, img:'https://i.ibb.co/GfJ4Lm7w/Bob-the-Cat.png', subtitle: 'Cute minimal feline design.', reviews: 76, rating: 4.8, badge: ''},
-  {id:'bolt-mini',name:'Lightning Bolt Mini', category:'decoration', price:0.5,oldPrice:1,img:'https://i.ibb.co/YF3P8TWw/Gemini-Generated-Image-nq2ej7nq2ej7nq2e-1.png', subtitle: 'Electrify your setup.', reviews: 32, rating: 4.5, badge: ''},
-  {id:'Bear',name:'Cute Bear', category:'animal',price:2,oldPrice:3,img:'https://i.ibb.co/50RP2xx/pxl-20220118-122936674.webp', subtitle: 'Chunky and adorable.', reviews: 112, rating: 4.9, badge: ''},
-  {id:'s-clip',name:'S Cable Clip', category:'decoration', price:1,oldPrice:2,img:'https://i.ibb.co/hFLjgPY6/20240316-163144.webp', subtitle: 'Keep your cables tidy.', reviews: 58, rating: 4.6, badge: '🖨️ On Demand'},
-  {id:'cat-bookmark',name:'Cat Bookmark', category:'animal',price:0.5,oldPrice:1,img:'https://i.ibb.co/RkxqC8V5/cat-bookmark-ver1.webp', subtitle: 'Thin profile to save your page.', reviews: 275, rating: 4.9, badge: ''},
-  {id:'bob-dog',name:'Bob 2.0 - The Dog',category:'animal',price:2, oldPrice:2.5, img:'https://i.ibb.co/ZR3bMvQF/4473be69-c7a9-4b14-b3df-c21bf0973b19.webp', subtitle: 'Man\'s best 3D printed friend.', reviews: 64, rating: 4.8, badge: ''},
-  {id:'mini-gojo',name:'Mini Gojo Figure', category:'decoration', price:2.5,oldPrice:3,img:'https://i.ibb.co/DH4cp3VP/obraz-2026-02-22-215025033.webp', subtitle: 'Transparent stylish design.', reviews: 421, rating: 4.9, badge: '🔥 Trending'},
-  {id:'violin-keychain',name:'Violin Keychain', category:'decoration', price:1.5,oldPrice:3,img:'https://i.ibb.co/DD9LzZD0/Gemini-Generated-Image-gm0fzsgm0fzsgm0f-1.png', subtitle: 'For the music lovers.', reviews: 41, rating: 4.7, badge: ''},
-  {id:'ninja-star',name:'Ninja Star', category:'fidget', price:2,oldPrice:3,img:'https://i.ibb.co/m5mZy6CR/Gemini-Generated-Image-h79jy9h79jy9h79j-1.png', subtitle: 'Safe, blunt-edge fun.', reviews: 88, rating: 4.6, badge: ''},
-  {id:'baby-yoda',name:'Baby Yoda', category:'decoration', price:2,oldPrice:3,img:'https://i.ibb.co/LzgR1gXf/babyoda2.png', subtitle: 'The child, printed just for you.', reviews: 512, rating: 5.0, badge: '⭐ Best Seller'},
-  {id:'golden-retriever',name:'Golden Retriever',category:'animal',price:2.5,oldPrice:3,img:'https://i.ibb.co/k2sJmqd0/neuvodoge3.jpg', subtitle: 'Loyal desk companion.', reviews: 92, rating: 4.8, badge: ''},
-  {id:'transparent-parrot',name:'Parrot',category:'animal',price:2,oldPrice:3.25,img:'https://i.ibb.co/fzg6D1Xz/img-4486-zoom-sat.jpg', subtitle: 'Vibrant transparent material.', reviews: 37, rating: 4.5, badge: ''},
-  {id:'minecraft-chicken',name:'Minecraft Chicken',category:'minecraft',price:1,oldPrice:2,img:'https://i.ibb.co/Qj1zVYBz/20230301-174959-1.webp', subtitle: 'Blocky clucker.', reviews: 145, rating: 4.7, badge: ''},
-  {id:'minecraft-axolotl',name:'Minecraft Axolotl',category:'minecraft',price:2,oldPrice:3.5,badge:'🔥 SALE',img:'https://i.ibb.co/Mk3qNcTn/20230301-175008.webp', subtitle: 'Articulated blocky design.', reviews: 265, rating: 4.8},
-  {id:'minecraft-frog',name:'Minecraft Frog',category:'minecraft',price:1.5,oldPrice:2,badge:'🔥 SALE',img:'https://media.printables.com/media/prints/635383/images/5026941_a75c2bc9-0856-4c68-ae84-91d649a196d6_43e681fb-57db-4250-8b7e-e9a427e9378d/thumbs/inside/1280x960/jpg/d4cd42e6-c6f9-4874-a651-b8c5f597aa97.webp', subtitle: 'Ribbit in 3D.', reviews: 198, rating: 4.9},
-  {id:'peg-holder-2pcs',name:'Extension Cord Holder',category:'decoration',price:2,oldPrice:3,img:'https://i.ibb.co/HTTSNpMx/20260307-120122.webp', subtitle: 'Heavy duty organization (2 pcs).', reviews: 23, rating: 4.6, badge: '🖨️ On Demand'}
+  {id:'cute-owl', name:'Cute Owl', nameAr:'بومة لطيفة', category:'animal', price:2, oldPrice:3, img:'https://i.ibb.co/Z6Vr7SHr/low-poly-eule-2.webp', subtitle:'Perfect desk companion.', subtitleAr:'رفيق مثالي لمكتبك.', reviews: 142, rating: 4.9, badge: '⭐ Best Seller', badgeAr: '⭐ الأكثر مبيعاً'},
+  {id:'Triangle-Fidget',name:'Triangle Fidget', nameAr:'مثلث فيدجت', category:'fidget', price:3,oldPrice:3.5,img:'https://i.ibb.co/Myrpn1wH/triangle.webp', subtitle: 'Smooth folding action for focus.', subtitleAr: 'حركة طي سلسة للتركيز.', reviews: 89, rating: 4.8, badge: '🔥 Trending', badgeAr: '🔥 رائج'},
+  {id:'Creeper',name:'Creeper Infinite Cube',nameAr:'مكعب كريبر اللانهائي',category:'minecraft' ,price:3.5,oldPrice:5,img:'https://media.printables.com/media/prints/377695/images/3173509_fb4285ad-6902-4a1b-a4d9-bc8aa4137bf0/thumbs/inside/1280x960/jpg/pxl_20230122_230019554.webp', subtitle: 'Folds endlessly. A fan favorite.', subtitleAr: 'يُطوى بلا نهاية. مفضل لدى الجميع.', reviews: 312, rating: 5.0, badge: '⭐ Best Seller', badgeAr: '⭐ الأكثر مبيعاً'},
+  {id:'Flexi-KeyChain',name:'Flexi Keychain', nameAr:'ميدالية مفاتيح مرنة', category:'fidget', price:3,oldPrice:3.5,img:'https://i.ibb.co/svH5F35Q/Gemini-Generated-Image-ny1ykfny1ykfny1y.png', subtitle: 'Satisfying tactile flex.', subtitleAr: 'مرونة لمسية مُرضية.', reviews: 45, rating: 4.7, badge: '', badgeAr: ''},
+  {id:'Flexi-Dino',name:'Flexi Dino', nameAr:'ديناصور مرن', category:'fidget', price:3.5,oldPrice:4,img:'https://i.ibb.co/3YcDfNCc/5e04faf6b1ebee0735ffb82771ca9051-display-large-46.webp', subtitle: 'Articulated joints that wiggle.', subtitleAr: 'مفاصل متحركة تتمايل.', reviews: 204, rating: 4.7, badge: '', badgeAr: ''},
+  {id:'bob-cat',name:'Bob the Cat',nameAr:'القط بوب',category:'animal',price:2, oldPrice: 2.5, img:'https://i.ibb.co/GfJ4Lm7w/Bob-the-Cat.png', subtitle: 'Cute minimal feline design.', subtitleAr: 'تصميم قطة بسيط وجميل.', reviews: 76, rating: 4.8, badge: '', badgeAr: ''},
+  {id:'bolt-mini',name:'Lightning Bolt Mini', nameAr:'صاعقة برق صغيرة', category:'decoration', price:0.5,oldPrice:1,img:'https://i.ibb.co/YF3P8TWw/Gemini-Generated-Image-nq2ej7nq2ej7nq2e-1.png', subtitle: 'Electrify your setup.', subtitleAr: 'أضف لمسة كهربائية لمكتبك.', reviews: 32, rating: 4.5, badge: '', badgeAr: ''},
+  {id:'Bear',name:'Cute Bear', nameAr:'دب لطيف', category:'animal',price:2,oldPrice:3,img:'https://i.ibb.co/50RP2xx/pxl-20220118-122936674.webp', subtitle: 'Chunky and adorable.', subtitleAr: 'مكتنز وجميل.', reviews: 112, rating: 4.9, badge: '', badgeAr: ''},
+  {id:'s-clip',name:'S Cable Clip', nameAr:'مشبك كابل S', category:'decoration', price:1,oldPrice:2,img:'https://i.ibb.co/hFLjgPY6/20240316-163144.webp', subtitle: 'Keep your cables tidy.', subtitleAr: 'حافظ على ترتيب كابلاتك.', reviews: 58, rating: 4.6, badge: '🖨️ On Demand', badgeAr: '🖨️ عند الطلب'},
+  {id:'cat-bookmark',name:'Cat Bookmark', nameAr:'فاصل كتب على شكل قطة', category:'animal',price:0.5,oldPrice:1,img:'https://i.ibb.co/RkxqC8V5/cat-bookmark-ver1.webp', subtitle: 'Thin profile to save your page.', subtitleAr: 'شكل رفيع للحفاظ على صفحتك.', reviews: 275, rating: 4.9, badge: '', badgeAr: ''},
+  {id:'bob-dog',name:'Bob 2.0 - The Dog',nameAr:'بوب 2.0 - الكلب',category:'animal',price:2, oldPrice:2.5, img:'https://i.ibb.co/ZR3bMvQF/4473be69-c7a9-4b14-b3df-c21bf0973b19.webp', subtitle: 'Man\'s best 3D printed friend.', subtitleAr: 'أفضل صديق مطبوع ثلاثي الأبعاد.', reviews: 64, rating: 4.8, badge: '', badgeAr: ''},
+  {id:'mini-gojo',name:'Mini Gojo Figure', nameAr:'مجسم غوجو المصغر', category:'decoration', price:2.5,oldPrice:3,img:'https://i.ibb.co/DH4cp3VP/obraz-2026-02-22-215025033.webp', subtitle: 'Transparent stylish design.', subtitleAr: 'تصميم شفاف أنيق.', reviews: 421, rating: 4.9, badge: '🔥 Trending', badgeAr: '🔥 رائج'},
+  {id:'violin-keychain',name:'Violin Keychain', nameAr:'ميدالية كمان', category:'decoration', price:1.5,oldPrice:3,img:'https://i.ibb.co/DD9LzZD0/Gemini-Generated-Image-gm0fzsgm0fzsgm0f-1.png', subtitle: 'For the music lovers.', subtitleAr: 'لعشاق الموسيقى.', reviews: 41, rating: 4.7, badge: '', badgeAr: ''},
+  {id:'ninja-star',name:'Ninja Star', nameAr:'نجمة نينجا', category:'fidget', price:2,oldPrice:3,img:'https://i.ibb.co/m5mZy6CR/Gemini-Generated-Image-h79jy9h79jy9h79j-1.png', subtitle: 'Safe, blunt-edge fun.', subtitleAr: 'متعة آمنة بحواف غير حادة.', reviews: 88, rating: 4.6, badge: '', badgeAr: ''},
+  {id:'baby-yoda',name:'Baby Yoda', nameAr:'بيبي يودا', category:'decoration', price:2,oldPrice:3,img:'https://i.ibb.co/LzgR1gXf/babyoda2.png', subtitle: 'The child, printed just for you.', subtitleAr: 'الطفل، مطبوع خصيصاً لك.', reviews: 512, rating: 5.0, badge: '⭐ Best Seller', badgeAr: '⭐ الأكثر مبيعاً'},
+  {id:'golden-retriever',name:'Golden Retriever',nameAr:'كلب غولدن ريتريفر',category:'animal',price:2.5,oldPrice:3,img:'https://i.ibb.co/k2sJmqd0/neuvodoge3.jpg', subtitle: 'Loyal desk companion.', subtitleAr: 'رفيق مكتب وفي.', reviews: 92, rating: 4.8, badge: '', badgeAr: ''},
+  {id:'transparent-parrot',name:'Parrot',nameAr:'ببغاء',category:'animal',price:2,oldPrice:3.25,img:'https://i.ibb.co/fzg6D1Xz/img-4486-zoom-sat.jpg', subtitle: 'Vibrant transparent material.', subtitleAr: 'مادة شفافة زاهية الألوان.', reviews: 37, rating: 4.5, badge: '', badgeAr: ''},
+  {id:'minecraft-chicken',name:'Minecraft Chicken',nameAr:'دجاجة ماينكرافت',category:'minecraft',price:1,oldPrice:2,img:'https://i.ibb.co/Qj1zVYBz/20230301-174959-1.webp', subtitle: 'Blocky clucker.', subtitleAr: 'دجاجة مكعبة الشكل.', reviews: 145, rating: 4.7, badge: '', badgeAr: ''},
+  {id:'minecraft-axolotl',name:'Minecraft Axolotl',nameAr:'أكسولوتل ماينكرافت',category:'minecraft',price:2,oldPrice:3.5,badge:'🔥 SALE',badgeAr:'🔥 تخفيض',img:'https://i.ibb.co/Mk3qNcTn/20230301-175008.webp', subtitle: 'Articulated blocky design.', subtitleAr: 'تصميم مكعب متحرك المفاصل.', reviews: 265, rating: 4.8},
+  {id:'minecraft-frog',name:'Minecraft Frog',nameAr:'ضفدع ماينكرافت',category:'minecraft',price:1.5,oldPrice:2,badge:'🔥 SALE',badgeAr:'🔥 تخفيض',img:'https://media.printables.com/media/prints/635383/images/5026941_a75c2bc9-0856-4c68-ae84-91d649a196d6_43e681fb-57db-4250-8b7e-e9a427e9378d/thumbs/inside/1280x960/jpg/d4cd42e6-c6f9-4874-a651-b8c5f597aa97.webp', subtitle: 'Ribbit in 3D.', subtitleAr: 'نقيق بشكل ثلاثي الأبعاد.', reviews: 198, rating: 4.9},
+  {id:'peg-holder-2pcs',name:'Extension Cord Holder',nameAr:'حامل سلك التمديد',category:'decoration',price:2,oldPrice:3,img:'https://i.ibb.co/HTTSNpMx/20260307-120122.webp', subtitle: 'Heavy duty organization (2 pcs).', subtitleAr: 'تنظيم متين (قطعتان).', reviews: 23, rating: 4.6, badge: '🖨️ On Demand', badgeAr: '🖨️ عند الطلب'}
 ];
+
+// Translation Dictionary
+const TRANSLATIONS = {
+  en: {
+    searchPlaceholder: 'Search for Minecraft, animals...',
+    heroTitle: 'Premium 3D Printed Creations',
+    heroLocation: 'Designed and Printed in Jordan 🇯🇴',
+    trust1: '✔ High-quality PLA',
+    trust2: '✔ Printed fresh on order',
+    trust3: '✔ Fast local delivery',
+    shopNowBtn: 'Shop Now',
+    catAll: '♾️ All Items',
+    catAnimals: '🐱 Animals',
+    catMinecraft: '🎮 Minecraft',
+    catFidgets: '⚙️ Fidgets',
+    catDecor: '🏠 Decor',
+    yourCart: 'Your Cart',
+    total: 'Total:',
+    proceedCheckout: 'Proceed to Checkout',
+    orderPlaced: 'ORDER PLACED!',
+    orderConfirmMsg: 'WE WILL SEND YOU A CONFIRMATION MESSAGE',
+    returningIn: 'Returning to main page in',
+    seconds: 'seconds...',
+    checkoutTitle: 'Checkout',
+    fullName: 'Full Name',
+    email: 'Email',
+    jordan: 'Jordan +962',
+    palestine: 'Palestine +970',
+    lebanon: 'Lebanon +961',
+    usa: 'USA +1',
+    uk: 'UK +44',
+    phoneNumber: 'Phone Number',
+    country: 'Country',
+    shippingAddress: 'Shipping Address',
+    moreDetails: 'More Order Details (optional)',
+    paymentMethod: 'Payment Method',
+    paypal: 'PayPal',
+    cash: 'Cash',
+    stripe: 'Stripe',
+    placeOrder: 'Place Order',
+    backToStore: 'Back to Store',
+    footerBrand: 'ExpressBuild Labs © 2026',
+    footerTagline: 'Crafting quality products with care. Secure Checkout.',
+    addToCart: '🛍️ Add to Cart',
+    noProductsFound: 'No products found matching',
+    emptyCart: 'Your cart is empty.<br>Start adding some prints!',
+    freeShippingUnlocked: '🎉 You unlocked <b>FREE Shipping!</b>',
+    addMoreFor: 'Add',
+    moreToUnlock: 'more to unlock FREE Shipping 🚚',
+    cartEmptyAlert: 'Your cart is empty!',
+    pleaseFillIn: 'Please fill in:',
+    selectPayment: 'Please select a payment method',
+    placingOrder: 'Placing order...',
+    orderFailed: 'Order failed to send. Please check your connection and try again.',
+    darkModeTitle: 'Toggle Dark Mode',
+    save: 'Save',
+    reviews: 'reviews'
+  },
+  ar: {
+    searchPlaceholder: 'ابحث عن ماينكرافت، حيوانات...',
+    heroTitle: 'إبداعات مطبوعة ثلاثية الأبعاد فاخرة',
+    heroLocation: 'صُمم وطُبع في الأردن 🇯🇴',
+    trust1: '✔ بلاستيك PLA عالي الجودة',
+    trust2: '✔ يُطبع طازجاً عند الطلب',
+    trust3: '✔ توصيل محلي سريع',
+    shopNowBtn: 'تسوق الآن',
+    catAll: '♾️ كل المنتجات',
+    catAnimals: '🐱 حيوانات',
+    catMinecraft: '🎮 ماينكرافت',
+    catFidgets: '⚙️ ألعاب فيدجت',
+    catDecor: '🏠 ديكور',
+    yourCart: 'سلة التسوق',
+    total: 'المجموع:',
+    proceedCheckout: 'إتمام الطلب',
+    orderPlaced: 'تم تأكيد الطلب!',
+    orderConfirmMsg: 'سنرسل لك رسالة تأكيد قريباً',
+    returningIn: 'سيتم إعادتك للصفحة الرئيسية خلال',
+    seconds: 'ثانية...',
+    checkoutTitle: 'إتمام الطلب',
+    fullName: 'الاسم الكامل',
+    email: 'البريد الإلكتروني',
+    jordan: 'الأردن +962',
+    palestine: 'فلسطين +970',
+    lebanon: 'لبنان +961',
+    usa: 'الولايات المتحدة +1',
+    uk: 'المملكة المتحدة +44',
+    phoneNumber: 'رقم الهاتف',
+    country: 'الدولة',
+    shippingAddress: 'عنوان الشحن',
+    moreDetails: 'تفاصيل إضافية للطلب (اختياري)',
+    paymentMethod: 'طريقة الدفع',
+    paypal: 'باي بال',
+    cash: 'نقداً',
+    stripe: 'سترايب',
+    placeOrder: 'تأكيد الطلب',
+    backToStore: 'العودة للمتجر',
+    footerBrand: 'إكسبريس بيلد لابز © 2026',
+    footerTagline: 'نصنع منتجات عالية الجودة بعناية. دفع آمن.',
+    addToCart: '🛍️ أضف إلى السلة',
+    noProductsFound: 'لم يتم العثور على منتجات مطابقة لـ',
+    emptyCart: 'سلتك فارغة.<br>ابدأ بإضافة بعض المنتجات!',
+    freeShippingUnlocked: '🎉 لقد حصلت على <b>شحن مجاني!</b>',
+    addMoreFor: 'أضف',
+    moreToUnlock: 'أكثر للحصول على شحن مجاني 🚚',
+    cartEmptyAlert: 'سلتك فارغة!',
+    pleaseFillIn: 'الرجاء تعبئة:',
+    selectPayment: 'الرجاء اختيار طريقة الدفع',
+    placingOrder: 'جارٍ إرسال الطلب...',
+    orderFailed: 'فشل إرسال الطلب. الرجاء التحقق من اتصالك والمحاولة مرة أخرى.',
+    darkModeTitle: 'تبديل الوضع الداكن',
+    save: 'وفّر',
+    reviews: 'تقييم'
+  }
+};
+
+let currentLang = 'en';
 
 // App State
 let currentCategory = 'all';
@@ -434,25 +569,31 @@ const FREE_SHIPPING_THRESHOLD = 10;
 function renderProducts() {
   const grid = document.getElementById('products');
   grid.innerHTML = '';
+  const t = TRANSLATIONS[currentLang];
+  const isAr = currentLang === 'ar';
   
   const filtered = PRODUCTS.filter(p => {
     const matchesCategory = currentCategory === 'all' || p.category === currentCategory;
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery) || p.category.toLowerCase().includes(searchQuery);
+    const searchName = (isAr ? (p.nameAr || p.name) : p.name).toLowerCase();
+    const matchesSearch = searchName.includes(searchQuery) || p.name.toLowerCase().includes(searchQuery) || p.category.toLowerCase().includes(searchQuery);
     return matchesCategory && matchesSearch;
   });
 
   if(filtered.length === 0) {
-    grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">No products found matching "${searchQuery}".</div>`;
+    grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">${t.noProductsFound} "${searchQuery}".</div>`;
     return;
   }
 
   filtered.forEach(p => {
+    const displayName = isAr ? (p.nameAr || p.name) : p.name;
+    const displaySubtitle = isAr ? (p.subtitleAr || p.subtitle || '') : (p.subtitle || '');
+    const displayBadge = isAr ? (p.badgeAr || p.badge || '') : (p.badge || '');
     let savings = p.oldPrice ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) : 0;
-    let badgeHTML = p.badge ? `<div class='badge ${p.badge.includes('Trending') || p.badge.includes('SALE') ? 'trending' : p.badge.includes('Best') ? 'bestseller' : 'ondemand'}'>${p.badge}</div>` : '';
+    let badgeHTML = displayBadge ? `<div class='badge ${displayBadge.includes('Trending') || displayBadge.includes('SALE') || displayBadge.includes('رائج') || displayBadge.includes('تخفيض') ? 'trending' : displayBadge.includes('Best') || displayBadge.includes('الأكثر') ? 'bestseller' : 'ondemand'}'>${displayBadge}</div>` : '';
     let priceHTML = p.oldPrice 
       ? `<span class="old-price">${p.oldPrice.toFixed(2)} JD</span>
          <span class="new-price">${p.price.toFixed(2)} JD</span>
-         <span class="save-badge">Save ${savings}%</span>`
+         <span class="save-badge">${t.save} ${savings}%</span>`
       : `<span class="new-price">${p.price.toFixed(2)} JD</span>`;
 
     const card = document.createElement('div');
@@ -460,15 +601,15 @@ function renderProducts() {
     card.innerHTML = `
       <div class='thumb'>
         ${badgeHTML}
-        <img src='${p.img}' alt='${p.name}' loading="lazy">
+        <img src='${p.img}' alt='${displayName}' loading="lazy">
       </div>
       <div class='card-body'>
         <div class="rating">★★★★★ <span>(${p.reviews || Math.floor(Math.random() * 50) + 10})</span></div>
-        <div class='title'>${p.name}</div>
-        <div class='subtitle'>${p.subtitle || ''}</div>
+        <div class='title'>${displayName}</div>
+        <div class='subtitle'>${displaySubtitle}</div>
         <div class="pricing-block">${priceHTML}</div>
         <button class='btn-buy' onclick="addToCart('${p.id}')">
-          🛍️ Add to Cart
+          ${t.addToCart}
         </button>
       </div>`;
     grid.appendChild(card);
@@ -490,6 +631,43 @@ function handleSearch(e) {
 
 function toggleTheme() {
   document.body.classList.toggle('dark');
+}
+
+// Language System
+function toggleLanguage() {
+  currentLang = currentLang === 'en' ? 'ar' : 'en';
+  applyTranslations();
+}
+
+function applyTranslations() {
+  const t = TRANSLATIONS[currentLang];
+  const isAr = currentLang === 'ar';
+  const html = document.documentElement;
+
+  html.setAttribute('lang', currentLang);
+  html.setAttribute('dir', isAr ? 'rtl' : 'ltr');
+
+  document.getElementById('langToggleBtn').textContent = isAr ? 'English' : 'العربية';
+  document.querySelector('.icon-btn').title = t.darkModeTitle;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+
+  // Re-render dynamic content
+  renderProducts();
+  updateCartUI();
+
+  // If checkout page is open, refresh its order summary text too
+  if (document.getElementById('checkoutPage').classList.contains('active')) {
+    refreshCheckoutSummary();
+  }
 }
 
 // Confetti Effect
@@ -580,6 +758,8 @@ function updateCartUI() {
   const totalDisplay = document.getElementById('cartTotal');
   const progFill = document.getElementById('shippingProgress');
   const progMsg = document.getElementById('shippingMsg');
+  const t = TRANSLATIONS[currentLang];
+  const isAr = currentLang === 'ar';
   
   container.innerHTML = '';
   let total = 0;
@@ -588,18 +768,19 @@ function updateCartUI() {
   const items = Object.values(cart);
   
   if(items.length === 0) {
-    container.innerHTML = `<div class="empty-cart">Your cart is empty.<br>Start adding some prints!</div>`;
+    container.innerHTML = `<div class="empty-cart">${t.emptyCart}</div>`;
   } else {
     items.forEach(item => {
       total += item.price * item.qty;
       count += item.qty;
+      const displayName = isAr ? (item.nameAr || item.name) : item.name;
       
       const el = document.createElement('div');
       el.className = 'cart-item';
       el.innerHTML = `
-        <img src="${item.img}" alt="${item.name}">
+        <img src="${item.img}" alt="${displayName}">
         <div class="item-details">
-          <div class="item-title">${item.name}</div>
+          <div class="item-title">${displayName}</div>
           <div class="item-price">${item.price.toFixed(2)} JD</div>
           <div class="qty-controls">
             <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
@@ -621,10 +802,10 @@ function updateCartUI() {
   progFill.style.width = percentage + '%';
   
   if(total >= FREE_SHIPPING_THRESHOLD) {
-    progMsg.innerHTML = '🎉 You unlocked <b>FREE Shipping!</b>';
+    progMsg.innerHTML = t.freeShippingUnlocked;
     progFill.classList.add('success');
   } else {
-    progMsg.innerHTML = `Add <b>${gap.toFixed(2)} JD</b> more to unlock FREE Shipping 🚚`;
+    progMsg.innerHTML = `${t.addMoreFor} <b>${gap.toFixed(2)} JD</b> ${t.moreToUnlock}`;
     progFill.classList.remove('success');
   }
 }
@@ -634,25 +815,36 @@ function toggleCart() {
   document.querySelector('.cart-overlay').classList.toggle('active');
 }
 
-function checkout() {
-  if(Object.keys(cart).length === 0) {
-    alert("Your cart is empty!");
-    return;
-  }
-
+function buildOrderSummaryHTML() {
   const items = Object.values(cart);
+  const isAr = currentLang === 'ar';
   let total = 0;
   let html = '';
   items.forEach(item => {
     total += item.price * item.qty;
+    const displayName = isAr ? (item.nameAr || item.name) : item.name;
     html += `<div class="checkout-item">
-      <img src="${item.img}" alt="${item.name}">
-      <div><strong>${item.name}</strong><br>Qty: ${item.qty}<br>${(item.price * item.qty).toFixed(2)} JD</div>
+      <img src="${item.img}" alt="${displayName}">
+      <div><strong>${displayName}</strong><br>${isAr ? 'الكمية' : 'Qty'}: ${item.qty}<br>${(item.price * item.qty).toFixed(2)} JD</div>
     </div>`;
   });
+  return { html, total };
+}
 
+function refreshCheckoutSummary() {
+  const { html, total } = buildOrderSummaryHTML();
   document.getElementById('orderSummary').innerHTML = html;
   document.getElementById('checkoutTotal').innerText = total.toFixed(2) + ' JD';
+}
+
+function checkout() {
+  const t = TRANSLATIONS[currentLang];
+  if(Object.keys(cart).length === 0) {
+    alert(t.cartEmptyAlert);
+    return;
+  }
+
+  refreshCheckoutSummary();
 
   document.querySelector('.cart-drawer').classList.remove('active');
   document.querySelector('.cart-overlay').classList.remove('active');
@@ -676,6 +868,8 @@ function clearFieldError(el) {
 }
 
 function placeOrder() {
+  const t = TRANSLATIONS[currentLang];
+  const isAr = currentLang === 'ar';
   const name = document.getElementById('ckName').value.trim();
   const email = document.getElementById('ckEmail').value.trim();
   const phoneCode = document.getElementById('ckCountryCode').value;
@@ -690,11 +884,11 @@ function placeOrder() {
   });
 
   const required = [
-    { id: 'ckName', val: name, label: 'Full Name' },
-    { id: 'ckEmail', val: email, label: 'Email' },
-    { id: 'ckPhone', val: phone, label: 'Phone Number' },
-    { id: 'ckCountry', val: country, label: 'Country' },
-    { id: 'ckAddress', val: address, label: 'Shipping Address' }
+    { id: 'ckName', val: name, label: t.fullName },
+    { id: 'ckEmail', val: email, label: t.email },
+    { id: 'ckPhone', val: phone, label: t.phoneNumber },
+    { id: 'ckCountry', val: country, label: t.country },
+    { id: 'ckAddress', val: address, label: t.shippingAddress }
   ];
 
   let firstMissing = null;
@@ -706,18 +900,18 @@ function placeOrder() {
   });
 
   if(firstMissing) {
-    alert(`Please fill in: ${firstMissing.label}`);
+    alert(`${t.pleaseFillIn} ${firstMissing.label}`);
     document.getElementById(firstMissing.id).focus();
     return;
   }
 
   if(!payment) {
-    alert('Please select a payment method');
+    alert(t.selectPayment);
     return;
   }
 
   if(Object.keys(cart).length === 0) {
-    alert('Your cart is empty');
+    alert(t.cartEmptyAlert);
     showShop();
     return;
   }
@@ -727,7 +921,8 @@ function placeOrder() {
   let orderLines = [];
   items.forEach(item => {
     subtotal += item.price * item.qty;
-    orderLines.push(`${item.name} x${item.qty} - ${(item.price * item.qty).toFixed(2)} JD`);
+    const displayName = isAr ? (item.nameAr || item.name) : item.name;
+    orderLines.push(`${displayName} (${item.name}) x${item.qty} - ${(item.price * item.qty).toFixed(2)} JD`);
   });
 
   const payload = {
@@ -739,12 +934,13 @@ function placeOrder() {
     details: details,
     address: address,
     order: orderLines.join('\n'),
-    total: subtotal.toFixed(2) + ' JD'
+    total: subtotal.toFixed(2) + ' JD',
+    language: currentLang
   };
 
   const placeBtn = document.querySelector('.checkout-actions .checkout-btn');
   const originalText = placeBtn.innerText;
-  placeBtn.innerText = 'Placing order...';
+  placeBtn.innerText = t.placingOrder;
   placeBtn.disabled = true;
 
   fetch('https://formspree.io/f/mwvnbnnl', {
@@ -770,7 +966,7 @@ function placeOrder() {
       document.querySelectorAll('input[name="ckPayment"]').forEach(el => el.checked = false);
     })
     .catch((error) => {
-      alert('Order failed to send. Please check your connection and try again.');
+      alert(t.orderFailed);
       console.error(error);
     })
     .finally(() => {
@@ -811,6 +1007,7 @@ window.addEventListener('resize', () => {
 });
 
 // Initial Render
+applyTranslations();
 renderProducts();
 updateCartUI();
 </script>
