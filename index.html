@@ -88,6 +88,18 @@ body.dark .icon-btn:hover { background: rgba(255,255,255,0.1); }
 .lang-btn:hover { background: var(--accent); color: white; transform: scale(1.05); }
 body.dark .lang-btn { background: #1e293b; }
 
+.currency-menu { position: fixed; top: 68px; right: 5%; background: var(--card-bg); border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); z-index: 1010; display: none; flex-direction: column; min-width: 190px; max-height: 320px; overflow-y: auto; padding: 6px; }
+body.dark .currency-menu { border-color: #334155; }
+.currency-menu.show { display: flex; }
+html[dir="rtl"] .currency-menu { right: auto; left: 5%; }
+.currency-option { background: none; border: none; text-align: left; padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-main); cursor: pointer; display: flex; justify-content: space-between; gap: 12px; }
+html[dir="rtl"] .currency-option { text-align: right; }
+.currency-option:hover { background: rgba(10,99,216,0.08); }
+.currency-option.active { background: var(--accent); color: white; }
+.currency-option .code { font-weight: 800; }
+.currency-option .rate-note { color: var(--text-muted); font-weight: 500; font-size: 12px; }
+.currency-option.active .rate-note { color: rgba(255,255,255,0.8); }
+
 /* V2 Hero Section */
 .hero-container { max-width: 1400px; margin: 100px auto 30px; padding: 0 20px; }
 .hero { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 24px; padding: 60px 30px; text-align: center; color: white; box-shadow: 0 20px 40px rgba(10, 99, 216, 0.15); position: relative; overflow: hidden; }
@@ -249,6 +261,8 @@ html[dir="rtl"] .old-price, html[dir="rtl"] .new-price { direction: ltr; unicode
   .header-actions a { display: none; }
   .cart-btn { padding: 10px 12px; font-size: 13px; }
   .lang-btn { padding: 8px 10px; font-size: 12px; }
+  .currency-menu { top: 60px; right: 3%; min-width: 160px; }
+  html[dir="rtl"] .currency-menu { left: 3%; right: auto; }
   .icon-btn { font-size: 18px; padding: 8px; }
 
   .hero-container { margin: 90px auto 20px; padding: 0 14px; }
@@ -327,6 +341,8 @@ html[dir="rtl"] .old-price, html[dir="rtl"] .new-price { direction: ltr; unicode
     
     <button class="cart-btn" onclick="toggleCart()">🛒 <span id="cartCount">0</span></button>
     <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">العربية</button>
+    <button class="lang-btn" id="currencyBtn" onclick="toggleCurrencyMenu()">JOD ▾</button>
+    <div class="currency-menu" id="currencyMenu"></div>
     <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
   </div>
 </header>
@@ -838,6 +854,161 @@ const TRANSLATIONS = {
 
 let currentLang = 'en';
 
+// ===== CURRENCY SYSTEM =====
+// Base currency for all stored prices in PRODUCTS is JOD.
+const BASE_CURRENCY = 'JOD';
+
+const CURRENCIES = [
+  { code: 'JOD', symbol: 'JD',  name: 'Jordanian Dinar' },
+  { code: 'USD', symbol: '$',   name: 'US Dollar' },
+  { code: 'EUR', symbol: '€',   name: 'Euro' },
+  { code: 'GBP', symbol: '£',   name: 'British Pound' },
+  { code: 'SAR', symbol: 'SR',  name: 'Saudi Riyal' },
+  { code: 'AED', symbol: 'AED', name: 'UAE Dirham' },
+  { code: 'EGP', symbol: 'E£',  name: 'Egyptian Pound' },
+  { code: 'TRY', symbol: '₺',   name: 'Turkish Lira' },
+  { code: 'CAD', symbol: 'C$',  name: 'Canadian Dollar' },
+  { code: 'AUD', symbol: 'A$',  name: 'Australian Dollar' },
+  { code: 'INR', symbol: '₹',   name: 'Indian Rupee' },
+  { code: 'JPY', symbol: '¥',   name: 'Japanese Yen' }
+];
+
+// Fallback fixed rates (approx, JOD base) — used if the live rate fetch fails.
+// These keep the site fully functional offline / if the API is unreachable.
+const FALLBACK_RATES_FROM_JOD = {
+  JOD: 1,
+  USD: 1.41,
+  EUR: 1.30,
+  GBP: 1.11,
+  SAR: 5.30,
+  AED: 5.19,
+  EGP: 69.5,
+  ILS: 5.15,
+  TRY: 47.5,
+  CAD: 1.94,
+  AUD: 2.15,
+  INR: 118.5,
+  JPY: 211.0
+};
+
+// Timezone -> currency map, used for lightweight auto-detection without
+// requesting location permission or calling a paid IP-geolocation service.
+const TIMEZONE_CURRENCY_MAP = {
+  'Asia/Amman': 'JOD',
+  'Asia/Jerusalem': 'ILS', 'Asia/Hebron': 'ILS', 'Asia/Gaza': 'ILS',
+  'Asia/Riyadh': 'SAR',
+  'Asia/Dubai': 'AED',
+  'Africa/Cairo': 'EGP',
+  'Europe/Istanbul': 'TRY',
+  'America/Toronto': 'CAD', 'America/Vancouver': 'CAD', 'America/Edmonton': 'CAD', 'America/Winnipeg': 'CAD', 'America/Halifax': 'CAD',
+  'Australia/Sydney': 'AUD', 'Australia/Melbourne': 'AUD', 'Australia/Brisbane': 'AUD', 'Australia/Perth': 'AUD', 'Australia/Adelaide': 'AUD',
+  'Asia/Kolkata': 'INR', 'Asia/Calcutta': 'INR',
+  'Asia/Tokyo': 'JPY',
+  'Europe/London': 'GBP',
+  'America/New_York': 'USD', 'America/Chicago': 'USD', 'America/Denver': 'USD', 'America/Los_Angeles': 'USD', 'America/Anchorage': 'USD', 'Pacific/Honolulu': 'USD'
+};
+// Any Europe/* timezone not explicitly mapped above defaults to EUR.
+
+let currentCurrency = BASE_CURRENCY;
+let liveRates = null; // populated from API if fetch succeeds; otherwise fallback is used
+let ratesAreLive = false;
+
+function detectDefaultCurrency() {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (TIMEZONE_CURRENCY_MAP[tz]) return TIMEZONE_CURRENCY_MAP[tz];
+    if (tz.startsWith('Europe/')) return 'EUR';
+  } catch (e) {
+    // Intl not available for some reason — fall through to USD
+  }
+  return 'USD'; // unsupported / undetectable region falls back to USD per spec
+}
+
+async function fetchLiveRates() {
+  try {
+    // Free, no-API-key endpoint. Base JOD, returns rates to all other currencies.
+    const res = await fetch('https://open.er-api.com/v6/latest/JOD');
+    const data = await res.json();
+    if (data && data.result === 'success' && data.rates) {
+      liveRates = data.rates;
+      ratesAreLive = true;
+    }
+  } catch (e) {
+    // Network blocked, offline, or API down — silently keep using fallback rates.
+    ratesAreLive = false;
+  }
+}
+
+function getRate(currencyCode) {
+  if (ratesAreLive && liveRates && liveRates[currencyCode]) {
+    return liveRates[currencyCode];
+  }
+  return FALLBACK_RATES_FROM_JOD[currencyCode] || 1;
+}
+
+// Converts a price stored in JOD into the currently selected display currency.
+function convertPrice(priceInJOD) {
+  const rate = getRate(currentCurrency);
+  return priceInJOD * rate;
+}
+
+// Formats a JOD-stored price into "SYMBOL 12.34" (or "12.34 SYMBOL" for JOD/AED
+// which conventionally trail the amount) in the active currency.
+function formatPrice(priceInJOD) {
+  const converted = convertPrice(priceInJOD);
+  const cur = CURRENCIES.find(c => c.code === currentCurrency) || CURRENCIES[0];
+  // JPY has no minor unit in everyday display; everything else uses 2 decimals.
+  const decimals = currentCurrency === 'JPY' ? 0 : 2;
+  const amount = converted.toFixed(decimals);
+  if (currentCurrency === 'JOD' || currentCurrency === 'AED') {
+    return `${amount} ${cur.symbol}`;
+  }
+  return `${cur.symbol}${amount}`;
+}
+
+function toggleCurrencyMenu() {
+  const menu = document.getElementById('currencyMenu');
+  if (menu.classList.contains('show')) {
+    menu.classList.remove('show');
+    return;
+  }
+  renderCurrencyMenu();
+  menu.classList.add('show');
+}
+
+function renderCurrencyMenu() {
+  const menu = document.getElementById('currencyMenu');
+  menu.innerHTML = CURRENCIES.map(c => {
+    const active = c.code === currentCurrency ? 'active' : '';
+    const rateTxt = c.code === BASE_CURRENCY ? '' : `<span class="rate-note">1 JD ≈ ${getRate(c.code).toFixed(2)}</span>`;
+    return `<button class="currency-option ${active}" onclick="setCurrency('${c.code}')">
+      <span><span class="code">${c.code}</span> ${c.name}</span>
+      ${rateTxt}
+    </button>`;
+  }).join('');
+}
+
+function setCurrency(code) {
+  currentCurrency = code;
+  document.getElementById('currencyBtn').textContent = code + ' ▾';
+  document.getElementById('currencyMenu').classList.remove('show');
+  renderProducts();
+  updateCartUI();
+  if (document.getElementById('checkoutPage').classList.contains('active')) {
+    refreshCheckoutSummary();
+  }
+}
+
+// Close the currency dropdown when clicking outside it
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('currencyMenu');
+  const btn = document.getElementById('currencyBtn');
+  if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove('show');
+  }
+});
+// ===== END CURRENCY SYSTEM =====
+
 // App State
 let currentCategory = 'all';
 let searchQuery = '';
@@ -870,10 +1041,10 @@ function renderProducts() {
     let savings = p.oldPrice ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) : 0;
     let badgeHTML = displayBadge ? `<div class='badge ${displayBadge.includes('Trending') || displayBadge.includes('SALE') || displayBadge.includes('رائج') || displayBadge.includes('تخفيض') ? 'trending' : displayBadge.includes('Best') || displayBadge.includes('الأكثر') ? 'bestseller' : 'ondemand'}'>${displayBadge}</div>` : '';
     let priceHTML = p.oldPrice 
-      ? `<span class="old-price">${p.oldPrice.toFixed(2)} JD</span>
-         <span class="new-price">${p.price.toFixed(2)} JD</span>
+      ? `<span class="old-price">${formatPrice(p.oldPrice)}</span>
+         <span class="new-price">${formatPrice(p.price)}</span>
          <span class="save-badge">${t.save} ${savings}%</span>`
-      : `<span class="new-price">${p.price.toFixed(2)} JD</span>`;
+      : `<span class="new-price">${formatPrice(p.price)}</span>`;
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -1060,7 +1231,7 @@ function updateCartUI() {
         <img src="${item.img}" alt="${displayName}">
         <div class="item-details">
           <div class="item-title">${displayName}</div>
-          <div class="item-price">${item.price.toFixed(2)} JD</div>
+          <div class="item-price">${formatPrice(item.price)}</div>
           <div class="qty-controls">
             <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
             <span>${item.qty}</span>
@@ -1073,7 +1244,7 @@ function updateCartUI() {
   }
 
   cartBtnCount.innerText = count;
-  totalDisplay.innerText = total.toFixed(2) + ' JD';
+  totalDisplay.innerText = formatPrice(total);
   
   const gap = FREE_SHIPPING_THRESHOLD - total;
   const percentage = Math.min((total / FREE_SHIPPING_THRESHOLD) * 100, 100);
@@ -1084,7 +1255,7 @@ function updateCartUI() {
     progMsg.innerHTML = t.freeShippingUnlocked;
     progFill.classList.add('success');
   } else {
-    progMsg.innerHTML = `${t.addMoreFor} <b>${gap.toFixed(2)} JD</b> ${t.moreToUnlock}`;
+    progMsg.innerHTML = `${t.addMoreFor} <b>${formatPrice(gap)}</b> ${t.moreToUnlock}`;
     progFill.classList.remove('success');
   }
 }
@@ -1104,7 +1275,7 @@ function buildOrderSummaryHTML() {
     const displayName = isAr ? (item.nameAr || item.name) : item.name;
     html += `<div class="checkout-item">
       <img src="${item.img}" alt="${displayName}">
-      <div><strong>${displayName}</strong><br>${isAr ? 'الكمية' : 'Qty'}: ${item.qty}<br>${(item.price * item.qty).toFixed(2)} JD</div>
+      <div><strong>${displayName}</strong><br>${isAr ? 'الكمية' : 'Qty'}: ${item.qty}<br>${formatPrice(item.price * item.qty)}</div>
     </div>`;
   });
   return { html, total };
@@ -1113,7 +1284,7 @@ function buildOrderSummaryHTML() {
 function refreshCheckoutSummary() {
   const { html, total } = buildOrderSummaryHTML();
   document.getElementById('orderSummary').innerHTML = html;
-  document.getElementById('checkoutTotal').innerText = total.toFixed(2) + ' JD';
+  document.getElementById('checkoutTotal').innerText = formatPrice(total);
 }
 
 function checkout() {
@@ -1203,7 +1374,7 @@ function placeOrder() {
   items.forEach(item => {
     subtotal += item.price * item.qty;
     const displayName = isAr ? (item.nameAr || item.name) : item.name;
-    orderLines.push(`${displayName} (${item.name}) x${item.qty} - ${(item.price * item.qty).toFixed(2)} JD`);
+    orderLines.push(`${displayName} (${item.name}) x${item.qty} - ${(item.price * item.qty).toFixed(2)} JD (${formatPrice(item.price * item.qty)} displayed)`);
   });
 
   const payload = {
@@ -1216,6 +1387,7 @@ function placeOrder() {
     address: address,
     order: orderLines.join('\n'),
     total: subtotal.toFixed(2) + ' JD',
+    total_displayed_currency: `${formatPrice(subtotal)} (${currentCurrency}, ${ratesAreLive ? 'live rate' : 'fallback rate'})`,
     language: currentLang
   };
 
@@ -1288,9 +1460,21 @@ window.addEventListener('resize', () => {
 });
 
 // Initial Render
+currentCurrency = detectDefaultCurrency();
+document.getElementById('currencyBtn').textContent = currentCurrency + ' ▾';
 applyTranslations();
 renderProducts();
 updateCartUI();
+
+// Fetch live rates in the background; re-render with accurate rates once they land.
+// Until this resolves, the fallback table above keeps everything working.
+fetchLiveRates().then(() => {
+  renderProducts();
+  updateCartUI();
+  if (document.getElementById('checkoutPage').classList.contains('active')) {
+    refreshCheckoutSummary();
+  }
+});
 </script>
 
 </body>
