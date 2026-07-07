@@ -144,12 +144,20 @@ html[dir="rtl"] .currency-option { text-align: right; }
 
 /* Category Pills */
 .categories-wrapper { max-width: 1400px; margin: 0 auto 30px; padding: 0 20px; width: 100%; }
-.categories { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.categories-bar { display: flex; gap: 12px; align-items: center; }
+.categories { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; flex: 1; min-width: 0; }
 .categories::-webkit-scrollbar { display: none; }
 .cat-pill { flex: 0 0 auto; background: var(--card-bg); color: var(--text-main); border: 1px solid rgba(0,0,0,0.1); padding: 12px 20px; border-radius: 50px; font-weight: 600; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
 body.dark .cat-pill { border-color: #334155; }
 .cat-pill:hover { border-color: var(--accent); transform: translateY(-2px); }
 .cat-pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+.sort-container { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; background: var(--card-bg); color: var(--text-main); border: 1px solid rgba(0,0,0,0.1); border-radius: 50px; padding: 0 14px 0 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+body.dark .sort-container { border-color: #334155; }
+.sort-container:hover { border-color: var(--accent); }
+.sort-icon { font-size: 13px; opacity: .55; }
+.sort-select { border: none; background: transparent; color: var(--text-main); font-weight: 600; font-size: 14px; padding: 12px 4px; cursor: pointer; outline: none; }
+.sort-select option { background: var(--card-bg); color: var(--text-main); }
 
 /* Grid & Cards */
 .layout { max-width: 1400px; margin: 0 auto 60px; padding: 0 20px; display: flex; gap: 30px; flex: 1; width: 100%; }
@@ -306,6 +314,9 @@ html[dir="rtl"] .old-price, html[dir="rtl"] .new-price { direction: ltr; unicode
   .hero-btn { padding: 14px 28px; font-size: 16px; width: 100%; }
 
   .categories-wrapper { padding: 0 14px; }
+  .categories-bar { flex-wrap: wrap; }
+  .sort-container { order: 2; width: 100%; justify-content: center; }
+  .categories { order: 1; }
   .cat-pill { padding: 10px 16px; font-size: 13px; }
 
   .layout { padding: 0 14px; }
@@ -397,12 +408,22 @@ html[dir="rtl"] .old-price, html[dir="rtl"] .new-price { direction: ltr; unicode
 </div>
 
 <div class="categories-wrapper" id="shop">
-  <div class="categories" id="categoryContainer">
-    <button class="cat-pill active" data-i18n="catAll" onclick="filterCategory('all', this)">♾️ All Items</button>
-    <button class="cat-pill" data-i18n="catAnimals" onclick="filterCategory('animal', this)">🐱 Animals</button>
-    <button class="cat-pill" data-i18n="catMinecraft" onclick="filterCategory('minecraft', this)">🎮 Minecraft</button>
-    <button class="cat-pill" data-i18n="catFidgets" onclick="filterCategory('fidget', this)">⚙️ Fidgets</button>
-    <button class="cat-pill" data-i18n="catDecor" onclick="filterCategory('decoration', this)">🏠 Decor</button>
+  <div class="categories-bar">
+    <div class="categories" id="categoryContainer">
+      <button class="cat-pill active" data-i18n="catAll" onclick="filterCategory('all', this)">♾️ All Items</button>
+      <button class="cat-pill" data-i18n="catAnimals" onclick="filterCategory('animal', this)">🐱 Animals</button>
+      <button class="cat-pill" data-i18n="catMinecraft" onclick="filterCategory('minecraft', this)">🎮 Minecraft</button>
+      <button class="cat-pill" data-i18n="catFidgets" onclick="filterCategory('fidget', this)">⚙️ Fidgets</button>
+      <button class="cat-pill" data-i18n="catDecor" onclick="filterCategory('decoration', this)">🏠 Decor</button>
+    </div>
+    <div class="sort-container">
+      <span class="sort-icon">↕️</span>
+      <select id="sortSelect" class="sort-select" onchange="handleSortChange(event)">
+        <option value="default" data-i18n="sortDefault">Default</option>
+        <option value="priceLowHigh" data-i18n="sortPriceLowHigh">Price: Low to High</option>
+        <option value="priceHighLow" data-i18n="sortPriceHighLow">Price: High to Low</option>
+      </select>
+    </div>
   </div>
 </div>
 
@@ -782,7 +803,19 @@ const PRODUCTS = [
   {id:'minecraft-chicken',name:'Minecraft Chicken',nameAr:'دجاجة ماينكرافت',category:'minecraft',price:1,oldPrice:2,img:'https://i.ibb.co/Qj1zVYBz/20230301-174959-1.webp', subtitle: 'Blocky clucker.', subtitleAr: 'دجاجة مكعبة الشكل.', reviews: 145, rating: 4.7, badge: '', badgeAr: ''},
   {id:'minecraft-axolotl',name:'Minecraft Axolotl',nameAr:'أكسولوتل ماينكرافت',category:'minecraft',price:2,oldPrice:3.5,badge:'🔥 SALE',badgeAr:'🔥 تخفيض',img:'https://i.ibb.co/Mk3qNcTn/20230301-175008.webp', subtitle: 'Articulated blocky design.', subtitleAr: 'تصميم مكعب متحرك المفاصل.', reviews: 265, rating: 4.8},
   {id:'minecraft-frog',name:'Minecraft Frog',nameAr:'ضفدع ماينكرافت',category:'minecraft',price:1.5,oldPrice:2,badge:'🔥 SALE',badgeAr:'🔥 تخفيض',img:'https://media.printables.com/media/prints/635383/images/5026941_a75c2bc9-0856-4c68-ae84-91d649a196d6_43e681fb-57db-4250-8b7e-e9a427e9378d/thumbs/inside/1280x960/jpg/d4cd42e6-c6f9-4874-a651-b8c5f597aa97.webp', subtitle: 'Ribbit in 3D.', subtitleAr: 'نقيق بشكل ثلاثي الأبعاد.', reviews: 198, rating: 4.9},
-  {id:'peg-holder-2pcs',name:'Extension Cord Holder',nameAr:'حامل سلك التمديد',category:'decoration',price:2,oldPrice:3,img:'https://i.ibb.co/HTTSNpMx/20260307-120122.webp', subtitle: 'Heavy duty organization (2 pcs).', subtitleAr: 'تنظيم متين (قطعتان).', reviews: 23, rating: 4.6, badge: '🖨️ On Demand', badgeAr: '🖨️ عند الطلب'}
+  {id:'peg-holder-2pcs',name:'Extension Cord Holder',nameAr:'حامل سلك التمديد',category:'decoration',price:2,oldPrice:3,img:'https://i.ibb.co/HTTSNpMx/20260307-120122.webp', subtitle: 'Heavy duty organization (2 pcs).', subtitleAr: 'تنظيم متين (قطعتان).', reviews: 23, rating: 4.6, badge: '🖨️ On Demand', badgeAr: '🖨️ عند الطلب'},
+  {id:'diamond-container',name:'Diamond-Patterned Container',nameAr:'حاوية بنقش الماس',category:'decoration',price:3.5,img:'https://i.ibb.co/xKjq0wkj/Gemini-Generated-Image-hc2i96hc2i96hc2i.png', subtitle: 'Elegant geometric storage for small everyday items.', subtitleAr: 'حاوية أنيقة بتصميم هندسي لتنظيم أغراضك اليومية الصغيرة.', reviews: 19, rating: 4.7, badge: '', badgeAr: ''},
+  {id:'dragon-egg-fidget',name:'Dragon Egg Twist Fidget',nameAr:'فيدجت بيضة التنين الملتوية',category:'fidget',price:5,oldPrice:5.5,img:'https://media.printables.com/media/prints/8dce4e52-aab7-4f86-9a8f-8a0679d16097/images/12160717_3ef68c27-c64a-4f0a-9290-10dedaef0615_28fe1a97-2dfb-4843-913e-ec9e797bdf71/thumbs/inside/1280x960/jpeg/img_5671-copy.webp', subtitle: 'A twisty fidget dragon egg.', subtitleAr: 'بيضة تنين فيدجت ملتوية وممتعة.', reviews: 54, rating: 4.8, badge: '🔥 Trending', badgeAr: '🔥 رائج'},
+  {id:'rotating-fidget',name:'Rotating Fidget',nameAr:'فيدجت دوّار',category:'fidget',price:5,oldPrice:6.5,img:'https://i.ibb.co/FLC0jyL9/img-4340.webp', subtitle: 'A mesmerizing rotating fidget.', subtitleAr: 'فيدجت دوّار يأسر النظر.', reviews: 47, rating: 4.7, badge: '🔥 Trending', badgeAr: '🔥 رائج'},
+  {id:'hexagon-fidget-keychain',name:'Hexagon Fidget Keychain',nameAr:'ميدالية مفاتيح فيدجت سداسية',category:'fidget',price:3,oldPrice:3.5,img:'https://i.ibb.co/rGZQXzCx/img-4497.webp', subtitle: 'A fun fidget to take with you on the go.', subtitleAr: 'فيدجت ممتع تصطحبه أينما ذهبت.', reviews: 38, rating: 4.6, badge: '🖨️ On Demand', badgeAr: '🖨️ عند الطلب'},
+  {id:'fidget-cube-infinite',name:'Fidget Cube (Infinite Cube)',nameAr:'مكعب فيدجت (مكعب لانهائي)',category:'fidget',price:2,img:'https://media.printables.com/media/prints/321806/images/3200473_8ae2611a-2c41-4bd2-b774-d485c9a6124d/thumbs/inside/1280x960/jpg/pxl_20230127_105332792.webp', subtitle: 'A folding infinite cube that clicks through endless shapes.', subtitleAr: 'مكعب لانهائي قابل للطي يتنقل بين أشكال لا حصر لها.', reviews: 61, rating: 4.7, badge: '🖨️ On Demand', badgeAr: '🖨️ عند الطلب'},
+  {id:'benchy',name:'Benchy',nameAr:'بينشي',category:'decoration',price:2,oldPrice:3,img:'https://i.ibb.co/Y7S6fsDT/20170315-img-0385.jpg', subtitle: 'A little boat friend.', subtitleAr: 'صديقك الصغير على شكل قارب.', reviews: 28, rating: 4.6, badge: '🖨️ On Demand', badgeAr: '🖨️ عند الطلب'},
+  {id:'mini-boat',name:'Mini Boat',nameAr:'قارب صغير',category:'decoration',price:5.5,oldPrice:8,img:'https://i.ibb.co/qMfKF27t/45425435.jpg', subtitle: 'A boat that might float.', subtitleAr: 'قارب قد يطفو فعلاً.', reviews: 16, rating: 4.5, badge: '', badgeAr: ''},
+  {id:'rotating-rings-fidget',name:'Rotating Rings Fidget',nameAr:'فيدجت الحلقات الدوّارة',category:'fidget',price:3,img:'https://media.printables.com/media/prints/552371/images/4435131_830e4fb2-007d-4bec-83f0-56adfc89f274/thumbs/inside/1920x1440/jpeg/img_1631.webp', subtitle: 'A cool Fidget.', subtitleAr: 'فيدجت رائع.', reviews: 22, rating: 4.6, badge: '', badgeAr: ''},
+  {id:'square-fidget',name:'Square Fidget',nameAr:'فيدجت مربع',category:'fidget',price:3.5,oldPrice:4,img:'https://i.ibb.co/93fQLYKF/db722c5f-c3da-47a3-be37-c950436029d3.webp', subtitle: 'A satisfying square fidget for endless clicking.', subtitleAr: 'فيدجت مربع مُرضٍ للنقر بلا توقف.', reviews: 25, rating: 4.6, badge: '', badgeAr: ''},
+  {id:'fidget-star-handle',name:'Fidget Star with Handle',nameAr:'نجمة فيدجت بمقبض',category:'fidget',price:2.5,img:'https://media.printables.com/media/prints/fa334fed-9597-4c7a-8c2f-de0d7f52cde6/images/12693507_ce018049-4439-4aad-a2e1-8ddc9b51e7f9_3642134c-c92d-437b-a1a2-505ca0b11de1/thumbs/inside/1280x960/webp/img_1958.webp', subtitle: '8-point fidget star with added handle for smoother spins, better grip, and playful stress relief.', subtitleAr: 'نجمة فيدجت بثماني رؤوس مع مقبض إضافي لدوران أنعم وقبضة أفضل وتفريغ ممتع للتوتر.', reviews: 31, rating: 4.7, badge: '', badgeAr: ''},
+  {id:'mini-whistle',name:'Mini Whistle',nameAr:'صافرة صغيرة',category:'decoration',price:0.80,oldPrice:1,img:'https://media.printables.com/media/prints/a77206e2-ef4d-40ab-ad69-2e3615192d08/images/12111151_c11d7449-426d-4cc4-811d-32349fab12cd_347436a8-7569-4647-bd74-2c86a8e60c39/thumbs/inside/1280x960/png/miniwhistle.webp', subtitle: 'Up to 115 DB!', subtitleAr: 'بصوت يصل إلى 115 ديسيبل!', reviews: 14, rating: 4.4, badge: '🖨️ On Demand', badgeAr: '🖨️ عند الطلب'},
+  {id:'whistle',name:'Whistle',nameAr:'صافرة',category:'decoration',price:2,oldPrice:2.5,img:'https://media.printables.com/media/prints/65/images/552_70f3cdf1-989f-4111-9f11-3c153488919f/thumbs/inside/1280x960/jpg/whistle-1.webp', subtitle: 'Simple, but fully functional whistle.', subtitleAr: 'صافرة بسيطة لكنها تعمل بكفاءة كاملة.', reviews: 11, rating: 4.4, badge: '', badgeAr: ''}
 ];
 
 // Translation Dictionary
@@ -859,7 +892,10 @@ const TRANSLATIONS = {
     colorSand: 'Sand',
     colorsCustomTitle: 'Need a custom print?',
     colorsCustomText: 'Have a 3D model you want printed? DM our Instagram and we can bring your design to life.',
-    colorsInstagramBtn: '📸 DM us on Instagram'
+    colorsInstagramBtn: '📸 DM us on Instagram',
+    sortDefault: 'Default',
+    sortPriceLowHigh: 'Price: Low to High',
+    sortPriceHighLow: 'Price: High to Low'
   },
   ar: {
     searchPlaceholder: 'ابحث عن ماينكرافت، حيوانات...',
@@ -933,7 +969,10 @@ const TRANSLATIONS = {
     colorSand: 'رملي',
     colorsCustomTitle: 'تحتاج طباعة مخصصة؟',
     colorsCustomText: 'لديك تصميم ثلاثي الأبعاد وتريد طباعته؟ راسلنا على انستغرام وسنحول تصميمك إلى واقع.',
-    colorsInstagramBtn: '📸 راسلنا على انستغرام'
+    colorsInstagramBtn: '📸 راسلنا على انستغرام',
+    sortDefault: 'الافتراضي',
+    sortPriceLowHigh: 'السعر: من الأقل إلى الأعلى',
+    sortPriceHighLow: 'السعر: من الأعلى إلى الأقل'
   }
 };
 
@@ -1098,6 +1137,7 @@ document.addEventListener('click', function(e) {
 // App State
 let currentCategory = 'all';
 let searchQuery = '';
+let currentSort = 'default';
 let cart = {};
 const FREE_SHIPPING_THRESHOLD = 15;
 
@@ -1114,6 +1154,16 @@ function renderProducts() {
     const matchesSearch = searchName.includes(searchQuery) || p.name.toLowerCase().includes(searchQuery) || p.category.toLowerCase().includes(searchQuery);
     return matchesCategory && matchesSearch;
   });
+
+  // Sort by price (raw JOD values — the ratio between products is identical in
+  // every display currency, so sorting on the stored JOD price is always correct
+  // regardless of which currency the shopper currently has selected).
+  if (currentSort === 'priceLowHigh') {
+    filtered.sort((a, b) => a.price - b.price);
+  } else if (currentSort === 'priceHighLow') {
+    filtered.sort((a, b) => b.price - a.price);
+  }
+  // 'default' intentionally applies no sort — filtered already preserves catalog order.
 
   if(filtered.length === 0) {
     grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">${t.noProductsFound} "${searchQuery}".</div>`;
@@ -1162,6 +1212,11 @@ function filterCategory(cat, btnElement) {
 
 function handleSearch(e) {
   searchQuery = e.target.value.toLowerCase();
+  renderProducts();
+}
+
+function handleSortChange(e) {
+  currentSort = e.target.value;
   renderProducts();
 }
 
