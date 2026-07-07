@@ -57,6 +57,38 @@ html[dir="rtl"] .project{ text-align:right; }
   .project{ min-width:220px; }
 }
 
+/* Print Colors Section */
+.colors-section{ padding:20px 24px 60px; }
+.colors-card{ max-width:1400px; margin:0 auto; display:flex; background:var(--card-bg); border:1px solid rgba(0,0,0,0.08); border-radius:24px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.04); }
+body.dark .colors-card{ border-color:#334155; box-shadow:0 10px 30px rgba(0,0,0,0.2); }
+.colors-card:hover{ transform:translateY(-4px); }
+.colors-preview{ width:220px; flex-shrink:0; background:linear-gradient(135deg, var(--accent), var(--accent2)); display:flex; justify-content:center; align-items:center; font-size:75px; }
+.colors-content{ padding:30px; flex:1; }
+.colors-content h2{ color:var(--text-main); margin:0; font-size:24px; font-weight:800; }
+.colors-subtitle{ color:var(--text-muted); font-size:14px; margin-top:6px; }
+.colors-description{ color:var(--text-main); opacity:.85; margin-top:16px; line-height:1.6; font-size:14px; }
+.colors-section-title{ color:var(--text-main); font-weight:700; margin-top:20px; }
+.color-swatches{ display:flex; gap:14px; flex-wrap:wrap; margin-top:12px; }
+.color-swatch{ color:var(--text-muted); font-size:11px; text-align:center; }
+.swatch-dot{ width:38px; height:38px; border-radius:50%; border:2px solid rgba(0,0,0,.12); margin-bottom:6px; }
+body.dark .swatch-dot{ border-color:rgba(255,255,255,.25); }
+.colors-custom{ margin-top:24px; padding-top:18px; border-top:1px solid rgba(0,0,0,0.08); }
+body.dark .colors-custom{ border-top-color:#334155; }
+.colors-custom-title{ color:var(--text-main); font-size:17px; font-weight:700; }
+.colors-custom-text{ color:var(--text-muted); font-size:13px; margin-top:7px; line-height:1.5; }
+.colors-instagram{ display:inline-block; margin-top:14px; padding:11px 20px; background:var(--text-main); color:var(--card-bg); text-decoration:none; border-radius:50px; font-size:13px; font-weight:700; }
+.colors-instagram:hover{ background:var(--accent); color:white; transform:scale(1.05); }
+html[dir="rtl"] .colors-card{ flex-direction:row-reverse; }
+html[dir="rtl"] .colors-custom{ text-align:right; }
+
+@media(max-width: 600px){
+  .colors-section{ padding:14px 14px 40px; }
+  .colors-card{ flex-direction:column; }
+  html[dir="rtl"] .colors-card{ flex-direction:column; }
+  .colors-preview{ width:100%; height:120px; font-size:55px; }
+  .colors-content{ padding:20px; }
+}
+
 /* Header & Search */
 header { position: fixed; top: 0; left: 0; right: 0; height: 75px; height: calc(75px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; padding-left: 5%; padding-right: 5%; z-index: 1000; }
 body.dark header { background: rgba(15, 23, 42, 0.9); border-bottom: 1px solid #334155; }
@@ -695,6 +727,33 @@ html[dir="rtl"] .old-price, html[dir="rtl"] .new-price { direction: ltr; unicode
   </div>
 </div>
 
+<div class="colors-section">
+  <div class="colors-card">
+    <div class="colors-preview">🎨</div>
+    <div class="colors-content">
+      <h2 data-i18n="colorsTitle">Available Print Colors</h2>
+      <div class="colors-subtitle" data-i18n="colorsSubtitle">Choose your color for your 3D printed creation</div>
+      <div class="colors-description" data-i18n="colorsDescription">Our 3D prints are available in multiple premium PLA colors. Pick the perfect color for your model, decoration, or custom project.</div>
+
+      <div class="colors-section-title" data-i18n="colorsSectionTitle">Available Colors</div>
+      <div class="color-swatches">
+        <div class="color-swatch"><div class="swatch-dot" style="background:#2f3831"></div><span data-i18n="colorForest">Forest</span></div>
+        <div class="color-swatch"><div class="swatch-dot" style="background:#717e83"></div><span data-i18n="colorGray">Gray</span></div>
+        <div class="color-swatch"><div class="swatch-dot" style="background:#7cb0b2"></div><span data-i18n="colorAqua">Aqua</span></div>
+        <div class="color-swatch"><div class="swatch-dot" style="background:#b95f33"></div><span data-i18n="colorCopper">Copper</span></div>
+        <div class="color-swatch"><div class="swatch-dot" style="background:#86876f"></div><span data-i18n="colorOlive">Olive</span></div>
+        <div class="color-swatch"><div class="swatch-dot" style="background:#b8ab7b"></div><span data-i18n="colorSand">Sand</span></div>
+      </div>
+
+      <div class="colors-custom">
+        <div class="colors-custom-title" data-i18n="colorsCustomTitle">Need a custom print?</div>
+        <div class="colors-custom-text" data-i18n="colorsCustomText">Have a 3D model you want printed? DM our Instagram and we can bring your design to life.</div>
+        <a href="https://www.instagram.com/expressbuild.labs/" target="_blank" class="colors-instagram" data-i18n="colorsInstagramBtn">📸 DM us on Instagram</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <p data-i18n="footerBrand">ExpressBuild Labs © 2026</p>
   <p data-i18n="footerTagline">Crafting quality products with care. Secure Checkout.</p>
@@ -787,7 +846,20 @@ const TRANSLATIONS = {
     projExpressWeb: 'Modern web development studio creating fast, clean, and scalable websites and online tools.',
     projRiftRoom: 'A creative multiplayer sandbox experience focused on community, building, and exploration.',
     website: 'Website',
-    shippingNote: 'Free shipping is available only within Jordan on orders above 15 JOD. International orders are not eligible for free shipping and will incur standard shipping fees based on destination.'
+    shippingNote: 'Free shipping is available only within Jordan on orders above 15 JOD. International orders are not eligible for free shipping and will incur standard shipping fees based on destination.',
+    colorsTitle: 'Available Print Colors',
+    colorsSubtitle: 'Choose your color for your 3D printed creation',
+    colorsDescription: 'Our 3D prints are available in multiple premium PLA colors. Pick the perfect color for your model, decoration, or custom project.',
+    colorsSectionTitle: 'Available Colors',
+    colorForest: 'Forest',
+    colorGray: 'Gray',
+    colorAqua: 'Aqua',
+    colorCopper: 'Copper',
+    colorOlive: 'Olive',
+    colorSand: 'Sand',
+    colorsCustomTitle: 'Need a custom print?',
+    colorsCustomText: 'Have a 3D model you want printed? DM our Instagram and we can bring your design to life.',
+    colorsInstagramBtn: '📸 DM us on Instagram'
   },
   ar: {
     searchPlaceholder: 'ابحث عن ماينكرافت، حيوانات...',
@@ -848,7 +920,20 @@ const TRANSLATIONS = {
     projExpressWeb: 'استوديو تطوير ويب حديث يبني مواقع وأدوات إلكترونية سريعة ونظيفة وقابلة للتوسع.',
     projRiftRoom: 'تجربة صندوق رمل جماعية إبداعية تركز على المجتمع والبناء والاستكشاف.',
     website: 'الموقع الإلكتروني',
-    shippingNote: 'الشحن المجاني متاح فقط داخل الأردن للطلبات التي تتجاوز 15 دينار أردني. الطلبات الدولية غير مؤهلة للشحن المجاني وستخضع لرسوم شحن قياسية حسب الوجهة.'
+    shippingNote: 'الشحن المجاني متاح فقط داخل الأردن للطلبات التي تتجاوز 15 دينار أردني. الطلبات الدولية غير مؤهلة للشحن المجاني وستخضع لرسوم شحن قياسية حسب الوجهة.',
+    colorsTitle: 'ألوان الطباعة المتوفرة',
+    colorsSubtitle: 'اختر لون منتجك المطبوع ثلاثي الأبعاد',
+    colorsDescription: 'تتوفر مطبوعاتنا ثلاثية الأبعاد بألوان PLA فاخرة متعددة. اختر اللون المثالي لتصميمك أو ديكورك أو مشروعك الخاص.',
+    colorsSectionTitle: 'الألوان المتوفرة',
+    colorForest: 'أخضر غابي',
+    colorGray: 'رمادي',
+    colorAqua: 'فيروزي',
+    colorCopper: 'نحاسي',
+    colorOlive: 'زيتوني',
+    colorSand: 'رملي',
+    colorsCustomTitle: 'تحتاج طباعة مخصصة؟',
+    colorsCustomText: 'لديك تصميم ثلاثي الأبعاد وتريد طباعته؟ راسلنا على انستغرام وسنحول تصميمك إلى واقع.',
+    colorsInstagramBtn: '📸 راسلنا على انستغرام'
   }
 };
 
@@ -866,6 +951,7 @@ const CURRENCIES = [
   { code: 'SAR', symbol: 'SR',  name: 'Saudi Riyal' },
   { code: 'AED', symbol: 'AED', name: 'UAE Dirham' },
   { code: 'EGP', symbol: 'E£',  name: 'Egyptian Pound' },
+  { code: 'KRW', symbol: '₩',  name: 'South Korean Won' },
   { code: 'TRY', symbol: '₺',   name: 'Turkish Lira' },
   { code: 'CAD', symbol: 'C$',  name: 'Canadian Dollar' },
   { code: 'AUD', symbol: 'A$',  name: 'Australian Dollar' },
@@ -883,7 +969,7 @@ const FALLBACK_RATES_FROM_JOD = {
   SAR: 5.30,
   AED: 5.19,
   EGP: 69.5,
-  ILS: 5.15,
+  KRW: 2157.0,
   TRY: 47.5,
   CAD: 1.94,
   AUD: 2.15,
@@ -895,11 +981,11 @@ const FALLBACK_RATES_FROM_JOD = {
 // requesting location permission or calling a paid IP-geolocation service.
 const TIMEZONE_CURRENCY_MAP = {
   'Asia/Amman': 'JOD',
-  'Asia/Jerusalem': 'ILS', 'Asia/Hebron': 'ILS', 'Asia/Gaza': 'ILS',
   'Asia/Riyadh': 'SAR',
   'Asia/Dubai': 'AED',
   'Africa/Cairo': 'EGP',
   'Europe/Istanbul': 'TRY',
+  'Asia/Seoul': 'KRW',
   'America/Toronto': 'CAD', 'America/Vancouver': 'CAD', 'America/Edmonton': 'CAD', 'America/Winnipeg': 'CAD', 'America/Halifax': 'CAD',
   'Australia/Sydney': 'AUD', 'Australia/Melbourne': 'AUD', 'Australia/Brisbane': 'AUD', 'Australia/Perth': 'AUD', 'Australia/Adelaide': 'AUD',
   'Asia/Kolkata': 'INR', 'Asia/Calcutta': 'INR',
@@ -957,8 +1043,8 @@ function convertPrice(priceInJOD) {
 function formatPrice(priceInJOD) {
   const converted = convertPrice(priceInJOD);
   const cur = CURRENCIES.find(c => c.code === currentCurrency) || CURRENCIES[0];
-  // JPY has no minor unit in everyday display; everything else uses 2 decimals.
-  const decimals = currentCurrency === 'JPY' ? 0 : 2;
+  // JPY and KRW have no minor unit in everyday display; everything else uses 2 decimals.
+  const decimals = (currentCurrency === 'JPY' || currentCurrency === 'KRW') ? 0 : 2;
   const amount = converted.toFixed(decimals);
   if (currentCurrency === 'JOD' || currentCurrency === 'AED') {
     return `${amount} ${cur.symbol}`;
@@ -1302,6 +1388,7 @@ function checkout() {
   document.querySelector('.categories-wrapper').style.display = 'none';
   document.querySelector('.layout').style.display = 'none';
   document.querySelector('.projects-footer').style.display = 'none';
+  document.querySelector('.colors-section').style.display = 'none';
   document.getElementById('checkoutPage').classList.add('active');
   window.scrollTo(0, 0);
 }
@@ -1312,6 +1399,7 @@ function showShop() {
   document.querySelector('.categories-wrapper').style.display = '';
   document.querySelector('.layout').style.display = '';
   document.querySelector('.projects-footer').style.display = '';
+  document.querySelector('.colors-section').style.display = '';
   window.scrollTo(0, 0);
 }
 
